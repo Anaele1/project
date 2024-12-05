@@ -1,0 +1,170 @@
+
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: rgba(66, 45, 18, 0.859);
+    color: rgb(250, 192, 47);
+  }
+
+  
+ /* Style the pop-up container */
+ .popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  color: rgb(112, 169, 253);
+}
+
+/* Style the pop-up */
+.popup {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 600px;
+}
+
+/* Style the close button */
+#close-popup {
+  background-color: #fa2b2b;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#close-popup:hover {
+  background-color: #ed9292;
+}
+
+.call {
+  background-color: forestgreen;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+  
+  .wrapper {
+    display: block;
+    margin: 0 auto;
+    background: rgb(76, 113, 76);
+    padding: 3rem;
+  }
+  
+  .gen {
+    display: flex;
+    column-gap: 8px;
+    background: rgb(85, 130, 85);
+    
+  }
+  
+  .navigation {
+    width: 100px;
+    margin-left: 5px;
+    padding: 1.5rem;
+  }
+
+  .nav-1 {
+    margin-bottom: 2rem ;
+  }
+
+  .nav-2 {
+    display: none;
+  }
+
+  #setting-icon, #bookmark-icon, #help-icon {
+    line-height: 1px;
+  }
+
+  .bk {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+  
+  .container {
+    background: rgb(85, 130, 85);
+    padding: 1rem;
+    margin-left: 2rem;
+    width: 700px;
+  }
+  
+  .gen_res {
+    border: 3px solid rgb(87, 139, 87);
+    border-radius: 6px;
+    padding: 8px;
+  }
+  
+  #question {
+    margin-bottom: 1rem;
+    font-weight: 650;
+  }
+  
+  #answer {
+    line-height: 25px;
+    font-size:  23px;
+    padding: 12px;
+    text-align:  justify;
+  }
+  
+  #clipboard {
+    text-align: end;
+    margin-top: 1rem;
+   color: rgb(215, 239, 215);
+  }
+  
+  #input_section {
+    margin-top: 1.6rem;
+    display: flex;
+    column-gap: 8px;
+    border-radius: 31px;
+    border: 0.3rem solid rgb(103, 163, 103);
+    height: auto;
+    padding: 1rem;
+    background:  rgb(103, 163, 103);
+  }
+  
+  .chatTools {
+    display: flex;
+    column-gap: 0.7rem;
+  }
+  
+ #querry {
+    margin-left: 5px;
+    width: auto;
+    border: 3px solid rgb(103, 163, 103);
+    width: 900px;
+    border-radius: 15px;
+  }
+  
+  #media {
+    margin-bottom: 0.6rem;
+    text-align: end;
+  }
+  
+  #querry::placeholder {
+    color: skyblue;
+    font-weight: 600;
+    background-color:rgb(103, 163, 103);
+  }
+  
+  #querry:focus {
+    outline: none;
+    border: none;
+  }
+  
+.rating {
+  display: flex;
+  column-gap: 10px;
+  margin-left: 15px;
+  }
+  

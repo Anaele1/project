@@ -1,0 +1,125 @@
+/* HEALTH CSS */
+body {
+  font-family: Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  background: rgb(222, 247, 239);
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+ul, li {
+  list-style: none;
+}
+
+.wrapper {
+  padding: 1rem;
+}
+
+.title {
+  text-align: center;
+  font-size: large;
+  color: crimson;
+  margin-bottom: 0.5rem;
+}
+
+.midBody {
+  display: flex;
+  column-gap: 30px;
+}
+
+/* side navigation styling */
+.sideNav {
+  width: 150px;
+  height: fit-content;
+  border-radius: 7px;
+  padding: 3rem;
+  margin-right: 0.5rem;
+  background: rgb(170, 231, 211);
+}
+
+.navList>h5 {
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* content section styling */
+.content {
+  flex-grow: 1;
+  border-radius: 7px;
+}
+
+h3 {
+  color: rgb(249, 41, 41);
+}
+
+/* form styling */
+#gen-form-container {
+  height: fit-content;
+  padding: 7px;
+  opacity: .7;
+  width: 100%;
+  height: 100%;
+}
+
+/* form close button */
+.cls-h1 {
+  background: red;
+  font-size: 1rem;
+}
+
+option {
+  width: 5rem;
+}
+
+#doctorPortal, #patientPortal {
+  background: rgba(29, 228, 250, 0.877);
+  padding: 10px;
+  opacity: 7;
+}
+
+.form-w {
+  width: 500px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 4rem;
+}
+
+/* emergency and trends section*/
+.caseContainer, .trends, .about {
+  display: block;
+  height: 250px;
+  padding: 15px;
+  background:rgb(201, 235, 224);
+  border-radius: 1rem;
+}
+
+/* medical trends and researches */
+.trends {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.about {
+  margin-bottom: 3rem;
+}
+
+label {
+  font-weight: 600;
+}
+
+input, textarea, select {
+  margin-bottom: 1rem;
+}
+
+/* footer section styling */
+.footer {
+  background: rgb(75, 95, 95);
+  height: 5rem;
+  color: gold;
+}
+
+/*form styling*\
