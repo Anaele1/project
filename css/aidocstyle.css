@@ -4,8 +4,6 @@ body{
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background: rgba(66, 45, 18, 0.859);
-    color: rgb(250, 192, 47);
   }
 
   
@@ -57,21 +55,20 @@ body{
   .wrapper {
     display: block;
     margin: 0 auto;
-    background: rgb(76, 113, 76);
+    background: rgb(201, 235, 224);
     padding: 3rem;
   }
   
   .gen {
     display: flex;
     column-gap: 8px;
-    background: rgb(85, 130, 85);
-    
   }
   
   .navigation {
     width: 100px;
     margin-left: 5px;
     padding: 1.5rem;
+    background-color: rgb(170, 231, 211);
   }
 
   .nav-1 {
@@ -92,16 +89,16 @@ body{
   }
   
   .container {
-    background: rgb(85, 130, 85);
     padding: 1rem;
     margin-left: 2rem;
     width: 700px;
+    background-color: rgb(192, 247, 229);
   }
   
   .gen_res {
-    border: 3px solid rgb(87, 139, 87);
     border-radius: 6px;
     padding: 8px;
+    background-color: rgb(178, 250, 226);
   }
   
   #question {
@@ -119,7 +116,6 @@ body{
   #clipboard {
     text-align: end;
     margin-top: 1rem;
-   color: rgb(215, 239, 215);
   }
   
   #input_section {
@@ -127,10 +123,9 @@ body{
     display: flex;
     column-gap: 8px;
     border-radius: 31px;
-    border: 0.3rem solid rgb(103, 163, 103);
     height: auto;
     padding: 1rem;
-    background:  rgb(103, 163, 103);
+    background: rgb(201, 235, 224);
   }
   
   .chatTools {
@@ -141,7 +136,6 @@ body{
  #querry {
     margin-left: 5px;
     width: auto;
-    border: 3px solid rgb(103, 163, 103);
     width: 900px;
     border-radius: 15px;
   }
@@ -152,9 +146,8 @@ body{
   }
   
   #querry::placeholder {
-    color: skyblue;
     font-weight: 600;
-    background-color:rgb(103, 163, 103);
+    background: rgb(201, 235, 224);
   }
   
   #querry:focus {
