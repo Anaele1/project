@@ -8,11 +8,21 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
+                      <!-- Pop-up container -->
+                      <div class="popup-container" id="popup-container">
+                        <div class="popup">
+                          <p style="text-align: center; font-size: 50px;"><b>Welcome to Temeheth</b></p>
+                          <p style="text-align: center; font-size: 30px;"> Your AI powered telemedicine platform</p>
+                          <button id="close-popup">Close</button>
+                        </div>
+                      </div>
+
+
   <div class="wrapper" id="wrp_1">
     
     <!-- header section -->
     <div class="header">
-        <div class="title"> My Health Project </div>
+        <div class="title"> Temeheth Project </div>
     </div>
     
     <!-- nav and content general container section -->
@@ -246,6 +256,20 @@
   
         </form>
       </div>
+
+      <script>
+        // Show pop-up after 2 seconds of page load
+        window.addEventListener("load", function() {
+            setTimeout(function() {
+                document.getElementById("popup-container").style.display = "flex";
+            }, 3000);
+        });
+  
+        // Close pop-up when close button is clicked
+        document.getElementById("close-popup").addEventListener("click", function() {
+            document.getElementById("popup-container").style.display = "none";
+        });
+      </script>
     
     <!-- javascript -->
     <script src="../js/scripts.js"></script>

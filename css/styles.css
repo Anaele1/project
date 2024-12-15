@@ -6,6 +6,44 @@ body {
   background: rgb(222, 247, 239);
 }
 
+ /* Style the pop-up container */
+ .popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  color: rgb(112, 169, 253);
+}
+
+/* Style the pop-up */
+.popup {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 600px;
+}
+
+/* Style the close button */
+#close-popup {
+  background-color: #fa2b2b;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#close-popup:hover {
+  background-color: #ed9292;
+}
+
+
 a {
   text-decoration: none;
   color: #000;
