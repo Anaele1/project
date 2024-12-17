@@ -13,18 +13,6 @@ app.use(express.json());
 app.use('/', routes);
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
-    // 404 catch-all handler (middleware)
-app.use(function(req, res, next){
-    res.status(404);
-    res.render('404');
-});
-
-    // 500 error handler (middleware)
-app.use(function(err, req, res, next){
-    console.error(err.stack);
-    res.status(500);
-    res.render('500');
-});
 
 // APP SET
 app.set('view engine', 'ejs');
@@ -46,11 +34,25 @@ app.post('/login', async (req, res) => {
     const user = await authenticateUser(username, password);
     if (user) {
       req.session.user = user;
-      res.redirect('/');
+      res.redirect('/patdash');
     } else {
       res.status(401).send('Invalid username or password');
     }
   });
+
+   // 404 catch-all handler (middleware)
+app.use(function(req, res, next){
+    res.status(404);
+    res.render('404');
+});
+
+    // 500 error handler (middleware)
+app.use(function(err, req, res, next){
+    console.error(err.stack);
+    res.status(500);
+    res.render('500');
+});
+
   
 
 //test database connection
