@@ -1,0 +1,173 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+    background: rgb(222, 247, 239);
+  }
+
+ /* Style the pop-up container */
+ .popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style the pop-up */
+.popup {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+}
+
+/* Style the close button */
+#close-popup {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#close-popup:hover {
+    background-color: #3e8e41;
+}
+
+
+/* patients / providers dashboard */
+.Pdashboard {
+    padding: 2rem;
+}
+
+/* patients header styling': notification, profile, appointments*/
+.Pheader {
+    font-size: medium;
+    background-color: rgb(201, 235, 224);;
+    display: flex;
+    column-gap: 20rem;
+    margin-left: 20px;
+    margin-bottom: 2rem;
+    height: 3rem;
+    border-radius: 23px;
+}
+
+.profile {
+    margin-left: 7rem; 
+}
+
+.profile, .appointment, .notification {
+    margin-top: 12px;
+}
+
+/* actions body styling */
+.dashboardContent {
+    display: flex;
+}
+
+/* list of doctors in patients dashboard styling */
+.Pr_ListWrapper { 
+    width: 350px;
+    margin-right: 2rem;
+    padding: 1rem;
+    margin-right: 0.5rem;
+    background: rgb(170, 231, 211);
+  
+}
+
+.list {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    margin-left: 2rem;
+}
+
+/* main styling */
+.main {
+    display: block;
+    column-gap: 2rem;
+    padding: 7px;
+    flex-grow: 1;
+} 
+
+.nav_img {
+    width: 100px;
+    height: 80px;
+    display: block;
+}
+
+.nav_mini_detail {
+   display: inline;
+   column-gap: 5px;
+   margin-left: 2rem;
+   line-height: 6px;
+}
+
+.doc_mini_detail {
+    display: flex;
+    column-gap: 5px;
+    margin-left: 15rem;
+    line-height: 2.4rem;
+ }
+
+.content_image {
+    width: 300px;
+    height: 200px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* call chat live video styling */
+.process {
+    text-align: center;
+}
+
+.process>button {
+    width: 6rem;
+    padding: 15px;
+    background: rgb(201, 235, 224);
+    border: none;
+}
+
+/* activity log list styling */
+.conditions {
+    display: flex;
+    column-gap: 6rem;
+    font-weight: 600;
+}
+
+.conditions>p {
+    background: rgb(249, 97, 97);
+    width: 9rem;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 16px;
+    height: 2rem;
+    line-height: 2rem;
+}
+
+.footer {
+    background: rgb(75, 95, 95);
+    height: 5rem;
+    color: gold;
+  }
+
+  /* specific for patients dashboard  */
+  .pr_s {
+    margin-bottom: 1rem;
+  }
+
+
+  /* specific for providers dashboard  */
+  .conditions>p>b {
+    margin-left: 1rem;
+    font-size: larger;
+    cursor: pointer;
+  }
+

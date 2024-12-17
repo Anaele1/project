@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ <link rel="stylesheet" href="/aidocstyle.css">
+ <title>aidoc</title>
+</head>
+  <body>
+                    <!-- Pop-up container -->
+                    <div class="popup-container" id="popup-container">
+                      <div class="popup">
+                        <p><b>Welcome to Aidoc,</b> your experienced health AI</p>
+                        <p> Is this your first time of visiting Me, or are you wondering what I can do for you? 
+                          Will you like to know what I am and my capabilities? If yes Click 
+                        <button class="call">About Me,</button> if no click the close button below.</p>
+                        <button id="close-popup">Close</button>
+                      </div>
+                    </div>
+
+
+
+
+
+   
+    <div class="wrapper">
+      <h1>Aidoc</h1>
+
+       <div class="gen">
+            
+            <div class="navigation">
+
+              <!--settings section of nav-->
+              <div class="nav-1 ">
+              <div id="setting-icon">
+                <i class="fa fa-cog"></i>
+                <h6>Setting</h6>
+              </div>
+              <div id="set" class="nav-2">
+                <!--make changes to background, text color, voice, image, text size -->
+                <label for="background"> Change background</label>
+                <label for="txt-c">Chose your text color</label>
+                <label for="txt-s">Text size</label>
+                <label for="voice">Select Prefered Voice</label>
+                <label for="dp">Change Question Icon</label>
+                <label for="switch">Switch Account</label>
+                <label for="stopPopUp"> Stop Welcome Pop-up</label>
+              </div>
+              </div>
+
+              <!--bookmark section of nav-->
+              <div class="nav-1 bk">
+                <div id="bookmark-icon">
+                  <i class="fa fa-bookmark"></i>
+                <h6>Bookmark</h6>
+                </div>
+                <div id="bookmark" class="nav-2">
+                  <!--list of bookmarks of user-->
+                  <p>here is the first bookmark</p>
+                  <p>here is the second bookmark</p>
+                  <p>here is the third bookmark</p>
+                  <p>here is the fourth bookmark</p>
+              </div>
+                </div>
+
+              <!--help section of nav-->
+            <div class="nav-1">
+                <div id="help-icon">
+                  <i class="fa fa-help">&#xf059;</i>
+                  <h6>Help</h6>
+                </div>
+              <div id="help" class="nav-2">
+                <!--get help and learn more on how to navigate Aidoc-->
+                <p>How to view your responses in video format </p>
+                <p>How to conversate with Aidoc using voice</p>
+                <p>Learn to change colors, sounds, texts etc in Aidoc</p>
+                <p>What can you use Aidoc for</p>
+                <p>etc</p>
+              </div>
+            </div>
+
+            </div>
+            
+          <div class="container">
+          
+            <div class="gen_res">
+              <!-- querry line -->
+              <div id="question"> <i class="fa">&#xf2c1;</i> <br> How can I treat diabetics</div>
+          
+                <!--output = response-->
+                <div id="response">
+              
+                  <div id="media"> 
+                    <!-- voice of AI; making your engagement interactive with voice -->
+                    <i class="fa"> &#xf028;</i>
+                  
+                    <!-- text to video of response -->
+                    <i class="fa"> &#xf144;</i>
+                  </div>
+              
+                  <!-- answers to questions asked AI -->
+                  <div id="answer"><i class="fa">&#xf0f0;</i> <br>
+                    Your healthcare provider may prescribe medication to help manage your blood sugar levels. These medications can include:   
+
+                    Insulin: Essential for people with type 1 diabetes and often used for type 2 diabetes.   
+                    Please consult with a healthcare professional for personalized advice and treatment recommendations.</div>
+                  </div>
+              
+                  <!-- copy answers from AI -->
+                  <div id="clipboard">  <i class="fa">&#xf24d;</i> </div>
+            
+                  <!-- rating section for a res querry -->
+                  <div class="rating">
+                    <p><i class="fa bookmark"> &#xf02e;</i></p>
+                    <p><i class="fa fa-thumbs-up"></i> </p>  
+                    <p><i class="fa fa-thumbs-down"></i> </p>
+                    <p> <i class="fa share">  &#xf1e0;</i></p>
+                    <p><i class="fa report"> &#xf14d; </i></p>
+                  </div>     
+            </div>
+              
+      
+              <!-- input section-->
+              <div id="input_section"> 
+                <!--specimen input-->
+                <textarea id="querry" placeholder="What is your health challenge! Ask me anything health related"></textarea>
+              
+                <div class="chatTools">
+                  <!-- camera -->
+                  <i class="fa fa-camera"> </i>
+                  <!--specimen input: image, video, voice etc-->
+                  <i class="fa upload"> &#xf0c6;</i>
+                  <!-- mic input -->
+                  <i class="fa microphone"> &#xf130; </i>
+                  <!-- submit querry button-->
+                  <i class="fa submit" onclick="askQuestion()">  &#xf04b; </i>
+                </div>  
+             </div>    
+          </div>     
+       </div>
+    </div>
+    
+   <div style="background: rgb(68, 69, 69); ">
+    <p id="about"> About Aidoc</p>
+    <p style="text-align: center;">copyright <b>Profitech</b></p>
+   </div>
+
+    <script>
+      // Show pop-up after 2 seconds of page load
+      window.addEventListener("load", function() {
+          setTimeout(function() {
+              document.getElementById("popup-container").style.display = "flex";
+          }, 3000);
+      });
+
+      // Close pop-up when close button is clicked
+      document.getElementById("close-popup").addEventListener("click", function() {
+          document.getElementById("popup-container").style.display = "none";
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Health Project </title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+                      <!-- Pop-up container -->
+                      <div class="popup-container" id="popup-container">
+                        <div class="popup">
+                          <p style="text-align: center; font-size: 50px;"><b>Welcome to Temeheth</b></p>
+                          <p style="text-align: center; font-size: 30px;"> Your AI powered telemedicine platform</p>
+                          <button id="close-popup">Close</button>
+                        </div>
+                      </div>
+
+
+  <div class="wrapper" id="wrp_1">
+    
+    <!-- header section -->
+    <div class="header">
+        <div class="title"> Temeheth Project </div>
+    </div>
+    
+    <!-- nav and content general container section -->
+    <div class="midBody">
+
+      <!-- left side navigation section -->
+      <div class="sideNav">
+        <div class="navigation">
+
+          <!-- doctors portal section -->
+          <div class="navList">
+            <h5 id="provider" onclick="Provider()">Provider Portal</h5>
+          </div>
+
+          <!-- patients portal section -->
+          <div class="navList">
+            <h5 id="patient" onclick="Patient()">Partient Portal</h5>
+          </div>
+
+          <!-- emergency report section -->
+           <div class="navList">
+            <h5 id="emergency"><a href="#"> Emegency Reports </a></h5>
+            <div id="emc" style="display: none;">
+              <li>View Reports</li>
+              <li>Report Emergency</li>
+            </div>
+          </div>
+
+          <!-- AI - aidoc section -->
+          <div class="navList">
+            <h5 id="ai-doctor"><a href="aidoc.html"> Aidoc</a></h5>
+          </div>
+
+           <!-- feedback section -->
+           <div class="navList">
+            <h5 id="contributions"><a href="#"> Contributions </a></h5>
+          </div>
+
+           <!-- health organizations section -->
+           <div class="navList">
+            <h5 id="orgs" class="org">Organizations</h5>
+            <div id="org_list" style="display: none; ">
+              <li> <a href="#">WHO</a></li>
+              <li> <a href="#">AHO</a></li>
+              <li> <a href="#">WAHO</a></li>
+              <li> <a href="#">NCDC</a></li>
+              <li> <a href="#">NGOs</a></li>
+            </div>
+          </div>
+
+          <!-- feedback section -->
+          <div class="navList">
+            <h5 id="feedback"> Feedback </h5>
+            <!--<textarea name="feedback" id="feedback" placeholder="Do you like our service? Which area(s) needs improvement? Give us a feedback on the platform functionality!"></textarea>-->
+          </div>
+        </div>
+      </div>
+      
+      <div class="content">
+            <!-- emergency and trends section -->
+              <div class="emergencyDisplay">
+                  <div class="caseContainer">
+                    <h3>Emergency Reports</h3>
+                    <p>
+                      <b>Mental disorderliness</b> <br> A <em>lady got mental issues</em> in K market, TY state.
+                      <img src="" alt="here is her image"> Need urgent attention from health workers! <b>Reported By Ann</b> <i>+23457684096</i>
+                      <div id="dateTime" style="margin-top: 1px;">11/30/2024, 09:35</div>
+                    </p>
+            
+                    <p>
+                      <b>Road Accident</b> <br> <em>Accident occurred</em> along AB express road near C junction; TY state.
+                      <img src="#" alt="here is her image"> Need urgent attention from health workers! <b>Reported By Daves</b> <i>+2346574475</i>
+                      <div id="dateTime" style="margin-top: 1px;">11/21/2024, 06:15</div>
+                    </p>
+                  </div>
+              </div>
+    
+          <div class="trends">
+            <h2>Health Trends</h2>
+            <p>Cohlera outbreake</p>
+            <p>Covid-19 second report</p>
+            <p>New discovery on how to manage HIV</p>
+            <p>New robotic surgeon</p>
+          </div>
+    
+          <div class="about">
+            <h2>About Temeheth</h2>
+            <p> Temeheth is dedicated online health care provider
+              that connect patients and doctors. It is has alot of 
+              benefits ranging from ... <i> <a href="#">Click and learn more</a></i>
+            </p>
+          </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p> copyright <b>Profitec</b></p>
+    </div>
+
+
+       
+    
+
+
+
+
+
+
+  </div>
+
+          <!-- beginning of general form container -->
+          <div id="gen-form-container">
+     
+            <div class="form-w">
+              <!-- doctor portal form -->
+             <div id="doctorPortal" style="display: none;">
+             <!-- doctor signup portal form -->
+             <div class="DrSignUpContainer">
+              <button class="cls-h1" id="close" onclick="Close()">X</button>
+              <h2 id="form-title"></h2>
+              <form id="DrSignupForm" style="display:none;">
+                  <label for="name">Name:</label>
+                  <input type="text" id="name" name="name" required><br><br>
+                  <label for="email">Email:</label>
+                  <input type="email" id="email" name="email" required><br><br>
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" name="password" required><br><br>
+                  <label for="confirmPassword">Confirm Password:</label>
+                  <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+                  <label for="termsAndConditions">I accept terms and conditions:</label>
+                  <input type="checkbox" id="termsAndConditions" name="termsAndConditions" required><br><br>
+                  <button type="submit">Sign Up</button>
+                  <p>Already have an account? <a href="#" onclick="toggleDoctor('DrLoginForm')">Login</a></p>
+                  <div id="signupMessage"></div>
+              </form>
+            </div>
+            <!-- doctor longin portal form -->
+            <div class="DrLoginContainer">
+              <!--<h2>Doctors Login</h2>-->
+               <form id="DrLoginForm">
+                  <label for="email">Email:</label>
+                  <input type="email" id="email" name="email" required><br><br>
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" name="password" required><br><br>
+                  <button type="submit">Login</button>
+                  <p><a href="#">Forgot password?</a></p>
+                  <p>Do not have account? <a href="#" onclick="toggleDoctor('DrSignupForm')">Sign Up</a></p>
+                  <div id="loginMessage"></div>
+                </form>
+                <p>Are you a Patient? Visit <a href="#" onclick="togglePortal('patientPortal')">Patient Portal</a></p>
+              </div>
+           </div>
+                
+           <!-- patient portal form -->  
+           <div id="patientPortal" style="display: none;">
+              <!-- patient signup portal form -->
+              <div class="PtSignUpContainer">
+               <button class="cls-h1" id="close" onclick="Close()">X</button>
+               <h2 id="fTitle"></h2>
+               <form id="PtSignupForm" style="display: none;">
+                  <label for="name">Name:</label>
+                  <input type="text" id="name" name="name" required><br><br>
+                  <label for="email">Email:</label>
+                  <input type="email" id="email" name="email" required><br><br>
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" name="password" required><br><br>
+                  <label for="confirmPassword">Confirm Password:</label>
+                  <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+                  <label for="termsAndConditions">I accept terms and conditions:</label>
+                  <input type="checkbox" id="termsAndConditions" name="termsAndConditions" required><br><br>
+                  <button type="submit">Sign Up</button>
+                  <p>Already have an account? <a href="#" onclick="togglePatient('PtLoginForm')">Login</a></p>
+                  <div id="signupMessage"></div>
+              </form>        
+             </div>
+            <!-- patient longin portal form -->       
+          <div class="PtLoginContainer">
+            <!-- <h2>Patient Login</h2>-->
+              <form id="PtLoginForm">
+                  <label for="email">Email:</label>
+                  <input type="email" id="email" name="email" required><br><br>
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" name="password" required><br><br>
+                  <button type="submit">Login</button>
+                  <p><a href="#">Forgot password?</a></p>
+                  <p>Do not have account? <a href="#"   onclick="togglePatient('PtSignupForm')"  >Sign Up</a></p>
+                  <div id="loginMessage"></div>
+              </form>
+              <p>Are you a Doctor? Visit <a href="#" onclick="togglePortal('doctorPortal')">Doctor Portal</a></p>
+            </div>
+           </div>
+            </div>
+      
+          </div>
+         <!-- end of general form container -->
+             
+
+
+      <!--Emergency report form-->
+      <div style="display: none;">
+        <h3>Report Emergency</h3>
+        <form action="">
+  
+          <label for="case">What case are you reporting</label>
+          <select name="case" id="">
+            <option value="accident">Accident</option>
+            <option value="mental">Mental disorderliness</option>
+            <option value="others">Others</option>
+          </select>
+    <br>
+          <label for="caseType">Give details of your report</label>
+          <textarea name="caseType" id="" placeholder="Give detai"></textarea>
+    <br>
+          <label for="image">upload image</label>
+          <input type="image" name="image">
+    <br>
+          <label for="actionRequired">How can we help</label>
+          <textarea name="actionRequired" id=""></textarea>
+    <br>
+          <label for="reporter">Reporter Name</label>
+          <input type="text" name="reporter" placeholder="enter your name">
+    <br>
+          <label for="phone">Reporter Phone No.</label>
+          <input type="number" name="phone">
+    <br>
+          <label for="date">Date of Case</label>
+          <input type="date" name="date">
+  
+          <button type="submit">Submit Report</button>
+  
+  
+        </form>
+      </div>
+
+      <script>
+        // Show pop-up after 2 seconds of page load
+        window.addEventListener("load", function() {
+            setTimeout(function() {
+                document.getElementById("popup-container").style.display = "flex";
+            }, 3000);
+        });
+  
+        // Close pop-up when close button is clicked
+        document.getElementById("close-popup").addEventListener("click", function() {
+            document.getElementById("popup-container").style.display = "none";
+        });
+      </script>
+    
+    <!-- javascript -->
+    <script src="../js/scripts.js"></script>
+    
+  
+</body>
+</html>
