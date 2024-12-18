@@ -22,12 +22,7 @@ router.get('/register', (req, res) => {
     res.render('login');
   });
 
-  // patient dashboard page route
-  router.get('/patient', (req, res) => {
-    res.render('patdash');
-  });
-
-  // provider dashboard page route
+  //provider dashboard page route
   router.get('/provider', (req, res) => {
     res.render('prodash');
   });
