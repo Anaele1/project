@@ -1,75 +1,99 @@
 const express = require('express');
 const routerp = express.Router();
-const db = require('./database');
+const {authenticatePatient, registerPatient, registerProvider, authenticateProvider, registerAdmin, authenticateAdmin } = require('./auth');
 const bcrypt = require('bcrypt');
-const { registerUser } = require('./auth');
 
-routerp.post('/login', async (req, res) => {
- 
+// // REGISTER PATIENT
+routerp.post('/register', async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const query = 'SELECT * FROM users WHERE username = ?';
-    
-    const [user] = await db.execute(query, [username]);
-    console.log('user data:', user);
-    if (!user) {
-      return res.status(401).send('invalid username or password');
-    }
-    if (!user.password) {
-      console.log('password field not found');
-      return res.status(500).send('internal server error: password not found');
-    }
-
-    console.log('password field:', user.password);
-
-    const isInvalidPassword = await bcrypt.compare(password, user.password);
-    if (!isInvalidPassword) {
-      return res.status(401).send('invalid username or passwod');
-    }
-
-    req.session.user = user;
-    res.redirect('/patdash');
-  }catch (error) {
-    console.error('Error logging in:', error);
-    res.status(500).send({ message: 'internal server error', error: error.message});
+    const {firstname, email, password } = req.body;
+    const patient = await registerPatient(firstname, email, password);
+    if (!patient) return res.status(500).send('error registering patient');
+    res.redirect('/login');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('error 1 of 2');
   }
 });
 
-//   const user = await authenticateUser(username, password);
-//   if (user) {
-//     req.session.user = user;
-//     res.redirect('/patdash');
-//   } else {
-//     res.status(401).send('Invalid username or password');
+//LOGIN PATIENT
+routerp.post('/login', async (req, res) => {
+  try {
+    const {email, password} = req.body;
+
+    const patient = await authenticatePatient(email, password);
+    if (!patient) return res.status(401).send('invalid email or password');
+    req.session.patient = patient;
+    res.redirect('/register');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('error loggin in')
+  }
+});
+
+// // REGISTER PROVIDER
+routerp.post('/registerpro', async (req, res) => {
+  try {
+    const {firstname, specialty, email, password } = req.body;
+    const provider = await registerProvider(firstname, specialty, email, password);
+    if (!provider) return res.status(500).send('error registering provider');
+    res.redirect('/login');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('error 1 of 2');
+  }
+});
+
+//LOGIN PROVIDER
+routerp.post('/loginpro', async (req, res) => {
+  try {
+    const {specialty, email, password} = req.body;
+
+    const provider = await authenticateProvider(specialty, email, password);
+    if (!provider) return res.status(401).send('invalid email or password');
+    req.session.provider = provider;
+    res.redirect('/register');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('error loggin in')
+  }
+});
+
+//  // REGISTER ADMIN
+// routerp.post('/registeradm', async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     const admin = await registerAdmin(email, password);
+//     if (!admin) return res.status(500).send('error registering admin');
+//     res.redirect('/login');
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('error 1 of 2');
 //   }
 // });
 
-routerp.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  const registered = await registerUser(username, password);
-  if (registered) {
-    res.redirect('/login');
-  } else {
-    res.status(500).send('Error registering user');
+//LOGIN ADMIN
+routerp.post('/loginadm', async (req, res) => {
+  try {
+    const {codenum, email, password} = req.body;
+
+    const admin = await authenticateAdmin(codenum, email, password);
+    if (!admin) return res.status(401).send('invaliD email or password');
+    req.session.admin = admin;
+    res.redirect('/register');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('error loggin in')
   }
 });
 
- // patient dashboard page route
- routerp.get('/patdash', (req, res) => {
-  if (req.session.user) {
-    res.render('patdash');
-  } else {
-    res.redirect('/login');
-  }
-});
-
-routerp.post('/logout', (req, res) => {
+//LOGOUT
+routerp.get('/logout', (req, res) => {
   req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect('/');
-    }
+    if (err) 
+      return
+     res.status(500).send('error logging out');
+     res.redirect('/login');
   });
 });
 

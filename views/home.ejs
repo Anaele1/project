@@ -17,7 +17,13 @@
                         </div>
                       </div>
 
+  <header>
+    <%- include ('partials/header.ejs') %>
+  </header>
+    
 
+<main>
+  
   <div class="wrapper" id="wrp_1">
     
     <!-- header section -->
@@ -34,7 +40,12 @@
 
           <!-- doctors portal section -->
           <div class="navList">
-            <h5 id="provider" onclick="Provider()">Provider Portal</h5>
+            <h5 id="admin" onclick="admin()">Admin Portal</h5>
+          </div>
+
+          <!-- doctors portal section -->
+          <div class="navList">
+            <h5 id="provider" onclick="Provider()"><a href="#">Provider Portal</a></h5>
           </div>
 
           <!-- patients portal section -->
@@ -53,7 +64,7 @@
 
           <!-- AI - aidoc section -->
           <div class="navList">
-            <h5 id="ai-doctor"><a href="aidoc.html"> Aidoc</a></h5>
+            <h5 id="ai-doctor"><a href="aidoc"> Aidoc</a></h5>
           </div>
 
            <!-- feedback section -->
@@ -108,7 +119,7 @@
             <p>New robotic surgeon</p>
           </div>
     
-          <div class="about">
+          <div class="about" id="abt">
             <h2>About Temeheth</h2>
             <p> Temeheth is dedicated online health care provider
               that connect patients and doctors. It is has alot of 
@@ -117,107 +128,7 @@
           </div>
       </div>
     </div>
-    
-    <div class="footer">
-      <p> copyright <b>Profitec</b></p>
-    </div>
-
-
-       
-    
-
-
-
-
-
-
   </div>
-
-          <!-- beginning of general form container -->
-          <div id="gen-form-container">
-     
-            <div class="form-w">
-              <!-- doctor portal form -->
-             <div id="doctorPortal" style="display: none;">
-             <!-- doctor signup portal form -->
-             <div class="DrSignUpContainer">
-              <button class="cls-h1" id="close" onclick="Close()">X</button>
-              <h2 id="form-title"></h2>
-              <form id="DrSignupForm" style="display:none;">
-                  <label for="name">Name:</label>
-                  <input type="text" id="name" name="name" required><br><br>
-                  <label for="email">Email:</label>
-                  <input type="email" id="email" name="email" required><br><br>
-                  <label for="password">Password:</label>
-                  <input type="password" id="password" name="password" required><br><br>
-                  <label for="confirmPassword">Confirm Password:</label>
-                  <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
-                  <label for="termsAndConditions">I accept terms and conditions:</label>
-                  <input type="checkbox" id="termsAndConditions" name="termsAndConditions" required><br><br>
-                  <button type="submit">Sign Up</button>
-                  <p>Already have an account? <a href="#" onclick="toggleDoctor('DrLoginForm')">Login</a></p>
-                  <div id="signupMessage"></div>
-              </form>
-            </div>
-            <!-- doctor longin portal form -->
-            <div class="DrLoginContainer">
-              <!--<h2>Doctors Login</h2>-->
-               <form id="DrLoginForm">
-                  <label for="email">Email:</label>
-                  <input type="email" id="email" name="email" required><br><br>
-                  <label for="password">Password:</label>
-                  <input type="password" id="password" name="password" required><br><br>
-                  <button type="submit">Login</button>
-                  <p><a href="#">Forgot password?</a></p>
-                  <p>Do not have account? <a href="#" onclick="toggleDoctor('DrSignupForm')">Sign Up</a></p>
-                  <div id="loginMessage"></div>
-                </form>
-                <p>Are you a Patient? Visit <a href="#" onclick="togglePortal('patientPortal')">Patient Portal</a></p>
-              </div>
-           </div>
-                
-           <!-- patient portal form -->  
-           <div id="patientPortal" style="display: none;">
-              <!-- patient signup portal form -->
-              <div class="PtSignUpContainer">
-               <button class="cls-h1" id="close" onclick="Close()">X</button>
-               <h2 id="fTitle"></h2>
-               <form id="PtSignupForm" style="display: none;">
-                  <label for="name">Name:</label>
-                  <input type="text" id="name" name="name" required><br><br>
-                  <label for="email">Email:</label>
-                  <input type="email" id="email" name="email" required><br><br>
-                  <label for="password">Password:</label>
-                  <input type="password" id="password" name="password" required><br><br>
-                  <label for="confirmPassword">Confirm Password:</label>
-                  <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
-                  <label for="termsAndConditions">I accept terms and conditions:</label>
-                  <input type="checkbox" id="termsAndConditions" name="termsAndConditions" required><br><br>
-                  <button type="submit">Sign Up</button>
-                  <p>Already have an account? <a href="#" onclick="togglePatient('PtLoginForm')">Login</a></p>
-                  <div id="signupMessage"></div>
-              </form>        
-             </div>
-            <!-- patient longin portal form -->       
-          <div class="PtLoginContainer">
-            <!-- <h2>Patient Login</h2>-->
-              <form id="PtLoginForm">
-                  <label for="email">Email:</label>
-                  <input type="email" id="email" name="email" required><br><br>
-                  <label for="password">Password:</label>
-                  <input type="password" id="password" name="password" required><br><br>
-                  <button type="submit">Login</button>
-                  <p><a href="#">Forgot password?</a></p>
-                  <p>Do not have account? <a href="#"   onclick="togglePatient('PtSignupForm')"  >Sign Up</a></p>
-                  <div id="loginMessage"></div>
-              </form>
-              <p>Are you a Doctor? Visit <a href="#" onclick="togglePortal('doctorPortal')">Doctor Portal</a></p>
-            </div>
-           </div>
-            </div>
-      
-          </div>
-         <!-- end of general form container -->
              
 
 
@@ -272,8 +183,12 @@
       </script>
     
     <!-- javascript -->
-    <script src="../js/scripts.js"></script>
-    
+    <script src="/scripts.js"></script>
   
+</main>  
+  
+<footer>
+  <%- include ('partials/footer.ejs') %>
+</footer>
 </body>
 </html>

@@ -1,16 +1,75 @@
-<!DOCTYPE html>
 <html>
 <head>
   <title>Register</title>
 </head>
 <body>
-  <h1>Register</h1>
-  <form action="/register" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username"><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br><br>
-    <input type="submit" value="Register">
-  </form>
+  <header>
+    <%- include ('partials/header.ejs') %>
+  </header>
+
+  <main>
+
+    <div class="r-form" id="r-form-gen">
+
+      <!-- PROVIDER LOGIN FORM -->
+      <div class="DrRegisterContainer">
+        <div id="message"></div>
+        <img src="" alt="account image">
+        <h2>Provider Register</h2>
+
+        <form id="DrRegisterForm">
+          <label for="firstname">First Name</label>
+          <input type="text" id="firstname" name="firstname">
+          <label for="specialty">Specialty</label>
+          <input type="text" id="specialty" name="specialty">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required><br><br>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required><br><br>
+          <label for="c-pwd">Confirm Password:</label>
+          <input type="password" id="c-pwd" name="c-pwd" required><br><br>
+          <button type="submit">Submit</button>
+          <p>Have account? <a href="#"   onclick="togglePatient('PtSignupForm')"  >Click here to Login</a></p>
+        </form>
+
+        <p>Are you an Admin? Visit <a href="#" onclick="togglePortal('doctorPortal')">Admin Portal</a></p>
+        <p>Are you a Patient? Visit <a href="#" onclick="togglePortal('doctorPortal')">Patient Portal</a></p>
+      </div>
+
+
+      <!-- PATIENTS REGISTER FORM -->
+      <div class="PtRegisterContainer">
+        <div id="message"></div>
+        <img src="" alt="account image">
+        <h2>Patient Register</h2>
+
+        <form id="PtLoginForm">
+          <label for="firstname">First Name</label>
+          <input type="text" id="firstname" name="firstname">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required><br><br>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required><br><br>
+          <label for="c-pwd">Confirm Password:</label>
+          <input type="password" id="c-pwd" name="c-pwd" required><br><br>
+          <button type="submit">Submit</button>
+          
+          <p>Have account? <a href="#"   onclick="togglePatient('PtSignupForm')">Click here to Login</a></p>
+          <div id="loginMessage"></div>
+        </form>
+
+        <p>Are you an Admin? Visit <a href="#" onclick="togglePortal('doctorPortal')">Admin Portal</a></p>
+        <p>Are you a Provider? Visit <a href="#" onclick="togglePortal('doctorPortal')">Provider Portal</a></p>
+      </div>
+
+    </div>
+
+  </main>
+
+
+
+  <footer>
+    <%- include ('partials/footer.ejs') %>
+  </footer>
 </body>
 </html>
