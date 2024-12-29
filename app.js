@@ -4,6 +4,9 @@
 const express = require('express');
 const app = express();
 const postRoutes = require('./postRoutes');
+const adminacc = require('./account/adminacc');
+const patientacc = require('./account/patientacc');
+const provideracc = require('./account/provideracc');
 const session = require('express-session');
 const path = require('path');
 require('dotenv').config();
@@ -27,8 +30,12 @@ app.use(session({
   cookie: {
    secure: false, httpOnly: true, maxAge: 3600000 }
 }));
+app.use('/', adminacc);
+app.use('/', patientacc);
+app.use('/', provideracc);
 app.use('/', routes);
 app.use('/', postRoutes);
+
 
 
 //server listening(url)

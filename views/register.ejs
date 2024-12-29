@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>Register</title>
+  <link rel="stylesheet" href="formstyle.css">
 </head>
 <body>
   <header>
@@ -10,14 +11,17 @@
   <main>
 
     <div class="r-form" id="r-form-gen">
-
+      
       <!-- PROVIDER LOGIN FORM -->
       <div class="DrRegisterContainer">
-        <div id="message"></div>
-        <img src="" alt="account image">
+      <% if (message) { %>
+        <p><%= message %></p>
+      <% } %>
+        <!-- <div id="message"></div> -->
+       
         <h2>Provider Register</h2>
-
-        <form id="DrRegisterForm">
+        <img src="" alt="account image">
+        <form id="DrRegisterForm" action="/register/provider" method="POST">
           <label for="firstname">First Name</label>
           <input type="text" id="firstname" name="firstname">
           <label for="specialty">Specialty</label>
@@ -39,11 +43,14 @@
 
       <!-- PATIENTS REGISTER FORM -->
       <div class="PtRegisterContainer">
-        <div id="message"></div>
-        <img src="" alt="account image">
+        <% if (message) { %>
+          <p><%= message %></p>
+        <% } %>
+        <!-- <div id="message"></div> -->
+        
         <h2>Patient Register</h2>
-
-        <form id="PtLoginForm">
+        <img src="" alt="account image">
+        <form id="PtRegisterForm" action="register/patient" method="POST">
           <label for="firstname">First Name</label>
           <input type="text" id="firstname" name="firstname">
           <label for="email">Email:</label>

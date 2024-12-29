@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const db = require('./database');
 
 
-//id, firstname, lastname, dateofbirth, email, password, gender, address, language
+
 //PATIENTS SECTION 
   //registering patient
 const registerPatient = async (firstname, email, password) => {
@@ -21,11 +21,11 @@ const registerPatient = async (firstname, email, password) => {
 const authenticatePatient = async (email, password) => {
   try {
     const query = 'SELECT * FROM patient WHERE email = ?';
-    const [patient] = await db.execute(query, [email]);
-    if (!patient.length)
+    const [user] = await db.execute(query, [email]);
+    if (!user.length)
     return null;
-    const isValidPassword = await bcrypt.compare(password, patient[0].password);
-    return isValidPassword ? patient[0] : null;
+    const isValidPassword = await bcrypt.compare(password, user[0].password);
+    return isValidPassword ? user[0] : null;
   } catch (error) {
     console.error('Error authenticating patient:', error);
     return null;

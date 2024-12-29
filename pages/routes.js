@@ -9,15 +9,10 @@ const router = express.Router();
 router.get('/', (req, res) => {
     res.render('home');
   });
-  
-  // About page route
-router.get('/about', (req, res) => {
-    res.render('about');
-  });
 
   // Service page route
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register', {message: ''});
   });
   
   // Login page route

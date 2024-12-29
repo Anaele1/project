@@ -1,6 +1,7 @@
 <html>
 <head>
   <title>Login</title>
+  <link rel="stylesheet" href="formstyle.css">
 </head>
 <body>
   <header>
@@ -12,10 +13,10 @@
     <div class="l-form" id="l-form-gen">
       <!-- ADMIN LOGIN FORM -->
       <div class="AdmLoginContainer">
-        <img src="" alt="account image">
+       
         <h2>Admin Login</h2>
-
-        <form id="AdmLoginForm">
+        <img src="" alt="account image">
+        <form id="AdmLoginForm" action="/login/admin">
           <div id="message"></div>
           <label for="codenum">Admin Code Number</label>
           <input type="text" id="codenum" name="codenum"><br><br>
@@ -34,11 +35,11 @@
 
       <!-- PROVIDER LOGIN FORM -->
       <div class="DrLoginContainer">
-        <div id="message"></div>
-        <img src="" alt="account image">
+        
+        <div id="message"></div>    
         <h2>Provider Login</h2>
-
-        <form id="DrLoginForm">
+        <img src="" alt="account image">
+        <form id="DrLoginForm" action="/login/provider" method="POST">
           <label for="specialty">Specialty</label>
           <input type="text" id="specialty" name="specialty"><br><br>
           <label for="email">Email:</label>
@@ -55,20 +56,20 @@
 
 
       <!-- PATIENTS LOGIN FORM -->
-      <div class="PtLoginContainer">
+      <div class="PtLoginContainer" id="loginpatient" >
         <div id="message"></div>
-        <img src="" alt="account image">
+        
         <h2>Patient Login</h2>
-
-        <form id="PtLoginForm">
+        <img src="" alt="account image">
+        <form id="PtLoginForm" action="/login/patient" method="POST">
           <label for="email">Email:</label>
           <input type="email" id="email" name="email" required><br><br>
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required><br><br>
           <button type="submit">Login</button>
           <p><a href="#">Forgot password?</a></p>
-          <p>Do not have account? <a href="#"   onclick="togglePatient('PtSignupForm')"  >Sign Up</a></p>
-          <div id="loginMessage"></div>
+          <p>Do not have account? <a href="#"   onclick="togglePatient('PtSignupForm')">Sign Up</a></p>
+          <!-- <div id="loginMessage"></div> -->
         </form>
 
         <p>Are you a Doctor? Visit <a href="#" onclick="togglePortal('doctorPortal')">Doctor Portal</a></p>
