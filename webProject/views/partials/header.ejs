@@ -1,0 +1,17 @@
+<% if (messages.success) { %>
+  <div class="alert alert-success"><%= messages.success %></div>
+<% } %>
+<% if (messages.error) { %>
+  <div class="alert alert-error"><%= messages.error %></div>
+<% } %>
+
+<p style="background-color: darkmagenta; color: beige;">Here is the header page</p>
+
+<!-- real time notification  -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    socket.on('appointmentUpdate', (data) => {
+        alert(`Your appointment with ${data.providerName} has been ${data.status}`);
+    });
+</script>

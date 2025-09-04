@@ -1,0 +1,70 @@
+html {
+  scroll-behavior: smooth;
+}
+
+main {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: aquamarine;
+}
+
+h1 {
+    text-align: center;
+    color: green;
+    font-size: small;
+}
+
+h3 {
+    text-align: center;
+    color: rgb(21, 80, 21);
+}
+
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 17px;
+    background-color: rgb(65, 213, 250);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    opacity: 0.7;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"]{
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+   
+}
+
+label {
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgb(59, 59, 58);
+}
+
+input[type="submit"] {
+  background-color: green;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 20px 30px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+button{
+  font-size: 21px;
+  background-color: rgb(145, 248, 145);
+  margin-left: 10rem;
+  border: none;
+}

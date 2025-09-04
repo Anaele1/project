@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet', href='/stylesheets/style.css'>
+  <title>provider dashboard</title>
+</head>
+  <body>
+    <header>
+      <%- include ('partials/header.ejs') %>
+    </header>
+    <a href="/account/home">Go back Home</a><br><br>
+    <h1>WELCOME TO PROVIDER DASHBOARD</h1>
+
+    <!--LOGOUT USER-->
+
+    <a href="/account/logout">Logoutpro</a><br><br>
+
+    <a href="/providers/pending">Show Pending</a>
+    <a href="/providers/accepted">Show Accepted</a>
+    <a href="/providers/cancelled">Show Cancelled</a>
+
+    <div>
+      <p>You are logged in as: <b style=" color: aqua; font-size: 45px;"> <%= user.firstName %> </b> </p>
+      <b><p>Your Email is: <%= user.email %> </p></b>
+    </div>
+<!-- Flash Messages -->
+<% if (messages.success) { %>
+  <div style="color: green;"><%= messages.success %></div>
+<% } %>
+<% if (messages.error) { %>
+  <div style="color: red;"><%= messages.error %></div>
+<% } %>
+
+
+<ul>
+  <h3>Pending Appointment Requests</h3>
+  <% if (typeof appointments !== 'undefined' && appointments.length) { %>
+    <% appointments.forEach(appointment => { %>
+      <li>
+        <p>
+          <strong>Patient:</strong> <%= appointment.patient_first_name %> <%= appointment.patient_last_name %><br>
+          <strong>Date:</strong> <%= appointment.appointment_date %><br>
+          <strong>Time:</strong> <%= appointment.appointment_time %><br>
+          <strong>Status:</strong> <%= appointment.status %>
+        </p>
+        <form action="/providers/respond" method="POST">
+          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+          <button type="submit" name="action" value="accept">Accept</button>
+          <button type="submit" name="action" value="cancel">Cancel</button>
+          <button>Chat</button>
+          <button>Re-Accept</button>
+        </form>
+      </li>
+    <% }); %>
+  <% } else { %>
+    <li>No pending appointment requests.</li>
+  <% } %>
+</ul>
+
+
+    <!-- footer section  -->
+    <footer>
+      <%- include ('partials/footer.ejs') %>
+    </footer>
+
+
+  </body>
+</html>
