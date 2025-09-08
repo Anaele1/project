@@ -14,22 +14,14 @@
         <a href="/account/home">Go back Home</a><br><br>
         WELCOME TO ADMIN DASHBOARD
 
-        <!--LOGOUT USER-->
-        <div>
-            <form action="/account/logouta" method="GET">
-                <button type="submit">logout</button>
-            </form>
-        </div>
-
-        <form action="/admins/ptall" method="GET">
-            <button type="submit">get all patients </button>
-        </form>
-
         <div>
             <h1>Welcome, <%= user.name %> </h1>
             <p>Code, <%= user.code %> </p>
             <b><p>Email, <%= user.email %> </p></b>
         </div>
+
+        <!-- appointments -->
+        <a href="/admins/appointments">Manage Appointments</a>
 
         <!-- footer section  -->
         <footer>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+    <title>Manage Appointments</title>
+</head>
+<body>
+    <main>
+        <header>
+            <%- include ('partials/header.ejs') %>
+        </header>
+        <a href="/admins/dashboard">Back to Dashboard</a>
+
+        <h1>Manage Appointments</h1>
+
+        <!-- Filter Form -->
+        <form action="/admins/appointments" method="GET">
+            <label for="provider_id">Provider ID:</label>
+            <input type="text" id="provider_id" name="provider_id" value="<%= provider_id || '' %>">
+
+            <label for="patient_id">Patient ID:</label>
+            <input type="text" id="patient_id" name="patient_id" value="<%= patient_id || '' %>">
+
+            <button type="submit">Filter</button>
+        </form>
+
+        <!-- Appointments Table -->
+        <table border="1">
+                <!-- Update the table header -->
+            <thead>
+                <tr>
+                    <th>Appointment ID</th>
+                    <th>Patient ID</th>
+                    <th>Provider ID</th>
+                    <th>Patient Name</th>
+                    <th>Provider Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <!-- Update the table body -->
+            <tbody>
+                <% appointments.forEach(appointment => { %>
+                <tr>
+                    <td><%= appointment.appointment_id %></td>
+                    <td><%= appointment.patient_id %></td>
+                    <td><%= appointment.provider_id %></td>
+                    <td><%= appointment.patient_first_name %> <%= appointment.patient_last_name %></td>
+                    <td><%= appointment.provider_first_name %> <%= appointment.provider_last_name %></td>
+                    <td><%= appointment.appointment_date %></td>
+                    <td><%= appointment.appointment_time %></td>
+                    <td><%= appointment.status %></td>
+                    <td>
+                        <form action="/admins/appointments/delete" method="POST">
+                            <input type="hidden" name="appointment_id" value="<%= appointment.appointment_id %>">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+
+        </table>
+
+        <footer>
+            <%- include ('partials/footer.ejs') %>
+        </footer>
+    </main>
+</body>
+</html>

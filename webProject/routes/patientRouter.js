@@ -76,18 +76,43 @@ router.post('/login', async (req, res) => {
 });
 
 // Patient Book appointment with provider
-router.post('/book', requireLogin, (req, res) => {
+router.post('/book', requireLogin, async (req, res) => {
     const { providerId, date, time } = req.body;
     const patientId = req.session.user.id;
-    const sql = 'INSERT INTO appointment (patient_id, provider_id, appointment_date, appointment_time, status) VALUES (?, ?, ?, ?, "pending")';
-    db.query(sql, [patientId, providerId, date, time], (err, result) => {
+
+    // Check for existing appointment
+    const checkSql = `
+        SELECT * FROM appointment
+        WHERE patient_id = ? AND provider_id = ?
+    `;
+    db.query(checkSql, [patientId, providerId], (err, results) => {
         if (err) {
             console.log(err);
-            req.flash('error', 'Failed to book appointment');
+            req.flash('error', 'Failed to check existing appointments');
             return res.redirect('/patients/patient_dashboard');
         }
-        req.flash('success', 'Appointment request sent!');
-        res.redirect('/patients/patient_dashboard');
+
+        // If an appointment already exists
+        if (results.length > 0) {
+            req.flash('error', 'You already have an appointment with this provider.');
+            return res.redirect('/patients/patient_dashboard');
+        }
+
+        // If no existing appointment, proceed with booking
+        const insertSql = `
+            INSERT INTO appointment
+            (patient_id, provider_id, appointment_date, appointment_time, status)
+            VALUES (?, ?, ?, ?, "pending")
+        `;
+        db.query(insertSql, [patientId, providerId, date, time], (err, result) => {
+            if (err) {
+                console.log(err);
+                req.flash('error', 'Failed to book appointment');
+                return res.redirect('/patients/patient_dashboard');
+            }
+            req.flash('success', 'Appointment request sent!');
+            res.redirect('/patients/patient_dashboard');
+        });
     });
 });
 

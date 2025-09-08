@@ -65,7 +65,7 @@ router.post('/login', async (req, res) => {
                         email: user.email,
                     };
                     
-                    res.redirect('/dashboard');
+                    res.redirect('admins/dashboard');
                 });
             } else {
                 res.status(401).json({ error: 'Invalid email or password.' });
@@ -76,6 +76,22 @@ router.post('/login', async (req, res) => {
     });
 });
 
+// POST: Delete an appointment by appointment_id
+router.post('/appointments/delete', requireLogin, (req, res) => {
+    const { appointment_id } = req.body;
+    if (!appointment_id) {
+        return res.status(400).json({ error: 'appointment_id is required.' });
+    }
+
+    const sql = 'DELETE FROM appointment WHERE appointment_id = ?';
+    db.query(sql, [appointment_id], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.redirect('/admins/appointments');
+    });
+});
 //===================================================================================================
                             // GET METHOD
 //admin dashboard route
@@ -83,21 +99,48 @@ router.get('/dashboard', (req, res) => {
     if (!req.session.user) {
         return res.redirect('/account/user')
     }
-    res.render('dashb', { user: req.session.user, result })
+    res.render('dashb', { user: req.session.user})
 });
-// select all patients
-const patientdata = `SELECT * FROM providers`;
-router.get('/ptall', (req, res) => {
-    db.query(patientdata, (err, result) => {
+
+// GET: Fetch appointments with provider and patient names
+router.get('/appointments', requireLogin, (req, res) => {
+    const { provider_id, patient_id } = req.query;
+    let sql = `
+        SELECT
+            a.*,
+            p.first_name AS patient_first_name,
+            p.last_name AS patient_last_name,
+            pr.first_name AS provider_first_name,
+            pr.last_name AS provider_last_name
+        FROM appointment a
+        LEFT JOIN patients p ON a.patient_id = p.patient_id
+        LEFT JOIN providers pr ON a.provider_id = pr.provider_id
+        WHERE 1=1
+    `;
+    const params = [];
+
+    if (provider_id) {
+        sql += ' AND a.provider_id = ?';
+        params.push(provider_id);
+    }
+    if (patient_id) {
+        sql += ' AND a.patient_id = ?';
+        params.push(patient_id);
+    }
+
+    db.query(sql, params, (err, appointments) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ error: err.message });
-        } else {
-            res.render('dashb', { db });
         }
+        res.render('appointments', {
+            user: req.session.user,
+            appointments,
+            provider_id,
+            patient_id
+        });
     });
 });
-
 //===================================================================================================
                             // UPDATE METHOD
 //====================================================================================================

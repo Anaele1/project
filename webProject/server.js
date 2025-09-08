@@ -34,7 +34,6 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // USE SECTION
-// MIDDLEWARE The order of middleware matters. express-session must be used before any route that uses req.session.
 app.use(bodyParser.urlencoded({ extended: false }));
 // Add session middleware
 app.use(session({
