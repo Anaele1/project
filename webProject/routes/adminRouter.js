@@ -104,7 +104,7 @@ router.get('/dashboard', (req, res) => {
 
 // GET: Fetch appointments with provider and patient names
 router.get('/appointments', requireLogin, (req, res) => {
-    const { provider_id, patient_id } = req.query;
+    const { provider_id, patient_id, status } = req.query;
     let sql = `
         SELECT
             a.*,
@@ -127,6 +127,10 @@ router.get('/appointments', requireLogin, (req, res) => {
         sql += ' AND a.patient_id = ?';
         params.push(patient_id);
     }
+    if (status) {
+        sql += ' AND a.status = ?';
+        params.push(status);
+    }
 
     db.query(sql, params, (err, appointments) => {
         if (err) {
@@ -137,7 +141,8 @@ router.get('/appointments', requireLogin, (req, res) => {
             user: req.session.user,
             appointments,
             provider_id,
-            patient_id
+            patient_id,
+            status
         });
     });
 });

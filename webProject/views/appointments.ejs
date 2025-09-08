@@ -21,14 +21,22 @@
             <input type="text" id="provider_id" name="provider_id" value="<%= provider_id || '' %>">
 
             <label for="patient_id">Patient ID:</label>
-            <input type="text" id="patient_id" name="patient_id" value="<%= patient_id || '' %>">
+            <input type="text" id="patient_id" name="patient_id" value="<%= patient_id || '' %>"><br>
+
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="">All Statuses</option>
+                <option value="pending" <%= status === 'pending' ? 'selected' : '' %>>Pending</option>
+                <option value="accepted" <%= status === 'accepted' ? 'selected' : '' %>>Accepted</option>
+                <option value="cancelled" <%= status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+            </select><br>
 
             <button type="submit">Filter</button>
         </form>
 
         <!-- Appointments Table -->
         <table border="1">
-                <!-- Update the table header -->
+                <!-- Table header -->
             <thead>
                 <tr>
                     <th>Appointment ID</th>
@@ -43,7 +51,7 @@
                 </tr>
             </thead>
 
-            <!-- Update the table body -->
+            <!-- Table body -->
             <tbody>
                 <% appointments.forEach(appointment => { %>
                 <tr>
