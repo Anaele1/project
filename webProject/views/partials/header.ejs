@@ -1,3 +1,4 @@
+<!-- success and error message -->
 <% if (messages.success) { %>
   <div class="alert alert-success"><%= messages.success %></div>
 <% } %>
@@ -5,9 +6,34 @@
   <div class="alert alert-error"><%= messages.error %></div>
 <% } %>
 
-<p style="background-color: darkmagenta; color: beige;">Here is the header page</p>
+<!-- Real-time date and time display -->
+<div id="datetime" style="background-color: darkmagenta; color: beige; text-align: center; padding: 5px;"></div>
 
-<!-- real time notification  -->
+<script>
+    // Function to update date and time
+    function updateDateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        const datetimeString = now.toLocaleDateString('en-US', options);
+        document.getElementById('datetime').textContent = datetimeString;
+    }
+
+    // Update date and time every second
+    setInterval(updateDateTime, 1000);
+
+    // Initialize on page load
+    updateDateTime();
+</script>
+
+<!-- real time notification -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
