@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet', href='/stylesheets/accountstyle.css'>
+    <title>providers account</title>
+</head>
+<body>
+    <header>
+      <%- include ('partials/header.ejs') %>
+    </header>
+
+    <a href="/home">Go back Home</a>
+    <main>
+        <%- include ('partials/userNav.ejs') %>
+        <div id="providerSection">
+            <h1>PROVIDERS PORTAL</h1>
+
+            <!-- signup for provider -->
+            <div class="" id="ps" style="display: none;">
+                    <h3>Sign Up</h3>
+                <form action="/providers/signup" method="POST">
+                    <div>
+                        <label for="first_name">First Name:</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+                    <div>
+                        <label for="last_name">Last Name:</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div>
+                        <label for="password">Confirm Password:</label>
+                        <input type="password" id="password" name="comfirm_password" required>
+                    </div>
+                    <button type="submit">Sign Up</button>
+                    <p>Registered Provider; <a href="#" onclick="providerL('pl')">Login</a></p>
+                </form>    
+            </div>
+
+            <!-- login for providers -->
+            <div class="" id="pl">
+                <h3>Loginpro</h3>
+                <form action="/providers/login" method="POST">
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" name="email" placeholder="Email" required>
+                    </div>
+                    <div>
+                        <label for="password">Password</label>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit">Login</button>
+                    <p>Not registered Provider;  <a href="#" onclick="providerS('ps')">Create Account </a></p>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- footer section  -->
+    <footer>
+      <%- include ('partials/footer.ejs') %>
+    </footer>
+
+    <script>
+        // providers signup
+        function providerS() {
+            document.getElementById("providerSection").style.display = "block";
+            document.getElementById("pl").style.display = "none";
+            document.getElementById("ps").style.display = "block";
+        }
+
+        // providers login
+        function providerL() {
+            document.getElementById("providerSection").style.display = "block";
+            document.getElementById("ps").style.display = "none";
+            document.getElementById("pl").style.display = "block";
+        }
+    </script>
+</body>
+</body>
+</html>

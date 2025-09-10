@@ -68,3 +68,26 @@ button{
   margin-left: 10rem;
   border: none;
 }
+
+.userNav {
+  text-align: center;
+  justify-content: center;
+}
+
+.userNav a {
+  margin-right: 2rem;
+  background-color: rgb(70, 241, 190);
+  text-decoration: none;
+  padding: px;
+  color: goldenrod;
+}
+
+.userNav a:hover {
+  background-color: aquamarine;
+  font-size: 28px;
+}
+
+/* This is the class for the active link */
+.userNav a.active {
+  background-color: aquamarine;
+}

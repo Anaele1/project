@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet', href='/stylesheets/accountstyle.css'>
+    <title>admins account</title>
+</head>
+<body>
+    <header>
+      <%- include ('partials/header.ejs') %>
+    </header>
+
+    <a href="/home">Go back Home</a>
+    <main>
+        <%- include ('partials/userNav.ejs') %>
+        <div id="adminSection" style="display: block;">
+            <h1>ADMIN PORTAL</h1>
+
+                <!-- admins signup -->
+                <div id="as" style="display: none;">
+                    <h3>Sign Up</h3>
+                    <form action="/admins/signup" method="POST">
+                        <div>
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div>
+                            <label for="admin_code">Admin_code:</label>
+                            <input type="text" id="admin_code" name="admin_code" required>
+                        </div>
+                        <div>
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div>
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <div>
+                            <label for="confirm_password">Confirm Password:</label>
+                            <input type="password" id="password" name="confirm_password" required>
+                        </div>
+                        <button type="submit">Sign Up</button>
+                        <p class=""><a href="#" onclick="adminL('al')">Login</a></p>
+                    </form>
+                </div>
+
+
+                <!-- admins login -->
+                <div class="" id="al">
+                        <h3>Login</h3>
+                    <form action="/admins/login" method="POST">
+                        <div>
+                            <label for="email">Email</label>
+                            <input type="email" name="email" placeholder="Email" required>
+                        </div>
+                        <div>
+                            <label for="password">Password</label>
+                            <input type="password" name="password" placeholder="Password" required>
+                        </div>
+                        <button type="submit">Login</button>
+                        <p class=""><a href="#" onclick="adminS('as')">Create Account</a></p>
+                    </form>
+                </div>
+        </div>
+    </main>
+
+    <!-- footer section  -->
+    <footer>
+      <%- include ('partials/footer.ejs') %>
+    </footer>
+
+    <script>
+        // admins signup
+        function adminS() {
+            document.getElementById("adminSection").style.display = "block";
+            document.getElementById("al").style.display = "none";
+            document.getElementById("as").style.display = "block";
+        }
+
+        // admin login
+        function adminL() {
+            document.getElementById("adminSection").style.display = "block";
+            document.getElementById("as").style.display = "none";
+            document.getElementById("al").style.display = "block";
+        }
+    </script>
+</body>
+</html>

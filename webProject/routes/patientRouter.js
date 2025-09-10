@@ -24,7 +24,7 @@ router.post('/signup', async (req, res) => {
                 console.log(err);
                 return res.status(500).json({ error: err.message });
             } else {
-                res.redirect('/account/user');
+                res.redirect('/account/users_patient_a');
             }
         });
     } catch (err) {
@@ -145,6 +145,15 @@ router.get('/patient_dashboard', requireLogin, (req, res) => {
     });
 });
 
+//logout patient
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ error: 'Could not log out.' });
+        }
+        res.redirect('/account/users_patient_a');
+    });
+});
 
 //===================================================================================================
                             // UPDATE METHOD

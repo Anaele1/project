@@ -5,24 +5,19 @@ const db = require('../database');
 const { requireLogin } = require('../middleware/auth');
 
 
-//home route
-router.get('/home', (req, res) => {
-    res.render('home')
+//provider account 
+router.get('/provider_a', (req, res) => {
+    res.render('provider')
 });
 
-//user account routes
-router.get('/user', (req, res) => {
-    res.render('account')
+//patient account
+router.get('/users_patient_a', (req, res) => {
+    res.render('patient')
 });
 
-//logout patient route
-router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).json({ error: 'Could not log out.' });
-        }
-        res.redirect('/account/user');
-    });
+//admin account
+router.get('/admin_a', (req, res) => {
+    res.render('admin')
 });
 
 module.exports = router;
