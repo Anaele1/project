@@ -24,6 +24,7 @@ router.post('/signup', async (req, res) => {
                 console.log(err);
                 return res.status(500).json({ error: err.message });
             } else {
+                req.flash('success', 'Successfuly Signed Up');
                 res.redirect('/account/users_patient_a');
             }
         });
@@ -64,6 +65,7 @@ router.post('/login', async (req, res) => {
                         lastName: user.last_name,
                         email: user.email,
                     };
+                    req.flash('success', 'Successfuly Logged in');
                     res.redirect('/patients/patient_dashboard');
                 });
             } else {
@@ -88,13 +90,13 @@ router.post('/book', requireLogin, async (req, res) => {
     db.query(checkSql, [patientId, providerId], (err, results) => {
         if (err) {
             console.log(err);
-            req.flash('error', 'Failed to check existing appointments');
+            req.flash('bookError', 'Failed to check existing appointments');
             return res.redirect('/patients/patient_dashboard');
         }
 
         // If an appointment already exists
         if (results.length > 0) {
-            req.flash('error', 'You already have an appointment with this provider.');
+            req.flash('bookError', 'You already have an appointment with this provider.');
             return res.redirect('/patients/patient_dashboard');
         }
 
@@ -107,10 +109,10 @@ router.post('/book', requireLogin, async (req, res) => {
         db.query(insertSql, [patientId, providerId, date, time], (err, result) => {
             if (err) {
                 console.log(err);
-                req.flash('error', 'Failed to book appointment');
+                req.flash('bookError', 'Failed to book appointment');
                 return res.redirect('/patients/patient_dashboard');
             }
-            req.flash('success', 'Appointment request sent!');
+            req.flash('bookSuccess', 'Appointment request sent!');
             res.redirect('/patients/patient_dashboard');
         });
     });

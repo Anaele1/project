@@ -1,9 +1,14 @@
 <!-- success and error message -->
+<style>
+    .su_er{
+        width: 150px;
+    }
+  </style>
 <% if (messages.success) { %>
-  <div class="alert alert-success"><%= messages.success %></div>
+  <div class="su_er" style="color: white; background: green;"><%= messages.success %></div>
 <% } %>
 <% if (messages.error) { %>
-  <div class="alert alert-error"><%= messages.error %></div>
+  <div class="su_er" style="color: white; background: red;"><%= messages.error %></div>
 <% } %>
 
 <!-- Real-time date and time display -->

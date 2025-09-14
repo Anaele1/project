@@ -10,7 +10,7 @@
     <header>
       <%- include ('partials/header.ejs') %>
     </header>
-    <a href="/home">Go back Home</a><br><br>
+    <a href="/">Go back Home</a><br><br>
     <h1>WELCOME TO PROVIDER DASHBOARD</h1>
 
     <a href="/providers/pending">Show Pending</a>
@@ -31,7 +31,7 @@
 
 
 <ul>
-  <h3>Pending Appointment Requests</h3>
+  
   <% if (typeof appointments !== 'undefined' && appointments.length) { %>
     <% appointments.forEach(appointment => { %>
       <li>
@@ -51,7 +51,7 @@
       </li>
     <% }); %>
   <% } else { %>
-    <li>No pending appointment requests.</li>
+    
   <% } %>
 </ul>
 

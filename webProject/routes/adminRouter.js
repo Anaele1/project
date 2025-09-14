@@ -24,6 +24,7 @@ router.post('/signup', async (req, res) => {
                 console.log(err);
                 return res.status(500).json({ error: err.message });
             } else {
+                req.flash('success', 'Successfuly Signed Up');
                 res.redirect('/account/admin_a');
             }
         });
@@ -64,7 +65,7 @@ router.post('/login', async (req, res) => {
                         code: user.admin_code,
                         email: user.email,
                     };
-                    
+                    req.flash('success', 'Successfuly Logged in');
                     res.redirect('admins/dashboard');
                 });
             } else {
