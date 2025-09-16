@@ -23,8 +23,6 @@
 
     <h2>Available Providers</h2>
     <ul>
-      <% if (messages.bookSuccess) { %><div style="color: rgb(33, 131, 20);"><%= messages.bookSuccess %></div><% } %>
-      <% if (messages.bookError) { %><div style="color: rgb(253, 24, 24);"><%= messages.bookError %></div><% } %>
       <% if (typeof providers !== 'undefined' && providers.length) { %>
         <% providers.forEach(provider => { %>
           <li>

@@ -1,19 +1,42 @@
-<!-- success and error message -->
 <style>
-    .su_er{
-        width: 150px;
-    }
-  </style>
-<% if (messages.success) { %>
-  <div class="su_er" style="color: white; background: green;"><%= messages.success %></div>
-<% } %>
-<% if (messages.error) { %>
-  <div class="su_er" style="color: white; background: red;"><%= messages.error %></div>
-<% } %>
+  /* success and error message styling */
+  #sms {
+    top: 0;
+    position: fixed;
+    color: #e7a11f;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 0 auto;
+    text-align: center;
+    transition: opacity 1s ease-out;
+  }
+</style>
+
+<!-- success and error message -->
+<div id="sms" style="display: none;">
+  <% if (messages.success) { %>
+  <div class="su_er"><%= messages.success %></div>
+  <% } %>
+  <% if (messages.error) { %>
+    <div class="su_er"><%= messages.error %></div>
+  <% } %>
+</div>
 
 <!-- Real-time date and time display -->
 <div id="datetime" style="background-color: darkmagenta; color: beige; text-align: center; padding: 5px;"></div>
 
+<!--success and error message script -->
+<script>
+  document.getElementById('sms').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('sms').style.opacity = 0;
+    setTimeout(() => {
+      document.getElementById('sms').style.display = 'none';
+    }, 1000); // wait for fade-out
+  }, 4000); // start fade-out after 4 seconds
+</script>
+
+<!-- date and time script -->
 <script>
     // Function to update date and time
     function updateDateTime() {
@@ -38,8 +61,7 @@
     updateDateTime();
 </script>
 
-<!-- real time notification -->
-<script src="/socket.io/socket.io.js"></script>
+<!-- real time notification script-->
 <script>
     const socket = io();
     socket.on('appointmentUpdate', (data) => {

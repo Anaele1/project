@@ -90,13 +90,13 @@ router.post('/book', requireLogin, async (req, res) => {
     db.query(checkSql, [patientId, providerId], (err, results) => {
         if (err) {
             console.log(err);
-            req.flash('bookError', 'Failed to check existing appointments');
+            req.flash('error', 'Failed to check existing appointments');
             return res.redirect('/patients/patient_dashboard');
         }
 
         // If an appointment already exists
         if (results.length > 0) {
-            req.flash('bookError', 'You already have an appointment with this provider.');
+            req.flash('error', 'You already have an appointment with this provider.');
             return res.redirect('/patients/patient_dashboard');
         }
 
@@ -109,10 +109,10 @@ router.post('/book', requireLogin, async (req, res) => {
         db.query(insertSql, [patientId, providerId, date, time], (err, result) => {
             if (err) {
                 console.log(err);
-                req.flash('bookError', 'Failed to book appointment');
+                req.flash('error', 'Failed to book appointment');
                 return res.redirect('/patients/patient_dashboard');
             }
-            req.flash('bookSuccess', 'Appointment request sent!');
+            req.flash('success', 'Appointment request sent!');
             res.redirect('/patients/patient_dashboard');
         });
     });
