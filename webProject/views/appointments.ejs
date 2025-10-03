@@ -1,3 +1,4 @@
+<!-- views/appointments -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,14 +37,14 @@
 
         <!-- Appointments Table -->
         <table border="1">
-                <!-- Table header -->
+                <!-- Update the table header -->
             <thead>
                 <tr>
                     <th>Appointment ID</th>
-                    <th>Patient ID</th>
                     <th>Provider ID</th>
-                    <th>Patient Name</th>
                     <th>Provider Name</th>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Status</th>
@@ -51,15 +52,15 @@
                 </tr>
             </thead>
 
-            <!-- Table body -->
+            <!-- Update the table body -->
             <tbody>
                 <% appointments.forEach(appointment => { %>
                 <tr>
                     <td><%= appointment.appointment_id %></td>
-                    <td><%= appointment.patient_id %></td>
                     <td><%= appointment.provider_id %></td>
-                    <td><%= appointment.patient_first_name %> <%= appointment.patient_last_name %></td>
                     <td><%= appointment.provider_first_name %> <%= appointment.provider_last_name %></td>
+                    <td><%= appointment.patient_id %></td>
+                    <td><%= appointment.patient_first_name %> <%= appointment.patient_last_name %></td>
                     <td><%= appointment.appointment_date %></td>
                     <td><%= appointment.appointment_time %></td>
                     <td><%= appointment.status %></td>

@@ -1,7 +1,8 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: aquamarine;
+  width: fit-content;
+  max-height: max-content;
 }
 
 a {
@@ -11,6 +12,87 @@ a {
 p {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
+/* Hide by default */
+.profileEdit, .section, #viewAppointments, #providersList{
+  display: none;
+}
+
+.admin_wrapper{
+  display: grid;
+  overflow: auto;
+  height: 100%;
+  grid-template-columns: 150px 1000px 271px;
+  grid-template-rows: 80px 100% 200px;
+  grid-template-areas: 'top_section top_section top_section' 'left_section center_section right_section' 'footer_section footer_section footer_section';
+}
+
+.users_wrapper{
+  display: grid;
+  overflow: auto;
+  grid-template-columns: 200px 1300px;
+  grid-template-rows: 80px 100% 200px;
+  grid-template-areas: 'users_top users_top' 'users_left users_container' 'users_footer users_footer';
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////// */
+/* Top section styling */
+#top_section{
+  grid-area: top_section;
+  /* background: green; */
+}
+
+#users_top{
+  grid-area: users_top;
+  /* background: green; */
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////// */
+/* Left side section styling */
+#left_section{
+  grid-area: left_section;
+  /* background: palegoldenrod; */
+}
+
+#users_left{
+  grid-area: users_left;
+  /* background: palegoldenrod; */
+}
+
+
+/* /////////////////////////////////////////////////////////////////////////////////////////// */
+/* Center section styling */
+#center_section{
+  grid-area: center_section;
+  /* background: snow; */
+}
+
+#users_container{
+  grid-area: users_container;
+  background: snow;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////// */
+/* Right side section styling */
+#right_section{
+  grid-area: right_section;
+  /* background: fuchsia; */
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////// */
+/* Footer section styling */
+#footer_section{
+  grid-area: footer_section;
+  background: grey;
+}
+
+#users_footer{
+  grid-area: users_footer;
+  background: grey;
+}
+
+/* /////////////////////////////////////////////////////////////////////////////////////////// */
+
 
  /* Style the pop-up container */
  .popup-container {
@@ -47,4 +129,20 @@ p {
 
 #close-popup:hover {
   background-color: #ed9292;
+}
+
+.edit{
+  color: rgb(253, 55, 55);
+  cursor: pointer;
+  margin-left: 7px;
+  font-weight: 800;
+  border-radius: 5px;
+}
+
+.editClose{
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 20px;
+  margin-left: 5px;
+  color: red;
 }

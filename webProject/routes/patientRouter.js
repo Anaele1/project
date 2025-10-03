@@ -1,3 +1,4 @@
+// routes/patientsRouter.js
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
@@ -118,12 +119,11 @@ router.post('/book', requireLogin, async (req, res) => {
     });
 });
 
-
 //===================================================================================================
                             // GET METHOD
 // View all providers on patient's dashboard
 router.get('/patient_dashboard', requireLogin, (req, res) => {
-    const providerSql = 'SELECT * FROM providers';
+    const providerSql = 'SELECT * FROM providers WHERE verify = "verified"';
     const appointmentSql = `
         SELECT a.*, p.first_name as provider_first_name, p.last_name as provider_last_name, a.status
         FROM appointment a
@@ -142,7 +142,7 @@ router.get('/patient_dashboard', requireLogin, (req, res) => {
                 req.flash('error', 'Failed to fetch appointments');
                 return res.redirect('/patients/patient_dashboard');
             }
-            res.render('patientsDashboard', { providers, appointments, user: req.session.user, messages: req.flash() });
+            res.render('patientsDashboard', { specialty: '', providers, appointments, user: req.session.user, messages: req.flash() });
         });
     });
 });
@@ -161,6 +161,7 @@ router.get('/logout', (req, res) => {
                             // UPDATE METHOD
 //====================================================================================================
                             // DELETE METHOD
+
 
 
 

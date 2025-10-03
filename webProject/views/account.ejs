@@ -5,30 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet', href='/stylesheets/accountstyle.css'>
     <title>account</title>
-            <style>
-                .userNav {
-                    text-align: center;
-                    justify-content: center;
-                }
-
-                .userNav a {
-                    margin-right: 2rem;
-                    background-color: rgb(70, 241, 190);
-                    text-decoration: none;
-                    padding: px;
-                    color: goldenrod;
-                }
-
-                .userNav a:hover {
-                    background-color: aquamarine;
-                    font-size: 28px;
-                }
-
-                /* This is the class for the active link */
-                .userNav a.active {
-                    background-color: aquamarine;
-                }
-            </style>
     </head>
 <body>
 
@@ -38,72 +14,14 @@
 
     <a href="/account/home">Go back Home</a>
 
-    <!-- users navigation -->
-     <div class="userNav" style="display: flex;">
-        <a href="#" onclick="adminL('al')">Admins Portal</a>
-        <a href="#" onclick="providerS('ps')">Providers Portal</a>
-        <a href="#" onclick="patientPtS('Pts')">Patients Portal</a>
-     </div>
-
   <main id="">
-    
-    <!--PROVIDERS SECTION-->
-    <div id="providerSection" style="display: block;">
-        <h1>PROVIDERS PORTAL</h1>
-
-        <!-- signup for provider -->
-        <div class="" id="ps">
-                <h3>Sign Up</h3>
-            <form action="/providers/signup" method="POST">
-                <div>
-                    <label for="first_name">First Name:</label>
-                    <input type="text" id="first_name" name="first_name" required>
-                </div>
-                <div>
-                    <label for="last_name">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name" required>
-                </div>
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div>
-                    <label for="password">Confirm Password:</label>
-                    <input type="password" id="password" name="comfirm_password" required>
-                </div>
-                <button type="submit">Sign Up</button>
-                <p>Registered Provider; <a href="#" onclick="providerL('pl')">Login</a></p>
-            </form>    
-        </div>
-        <!-- login for providers -->
-        <div class="" id="pl" style="display: none;">
-            <h3>Loginpro</h3>
-            <form action="/providers/login" method="POST">
-                <div>
-                    <label for="email">Email</label>
-                    <input type="email" name="email" placeholder="Email" required>
-                </div>
-                <div>
-                    <label for="password">Password</label>
-                    <input type="password" name="password" placeholder="Password" required>
-                </div>
-                <button type="submit">Login</button>
-                <p>Not registered Provider;  <a href="#" onclick="providerS('ps')">Create Account </a></p>
-            </form>
-        </div>
-    </div>
-
-
+    <div><%- include ('partials/userNav.ejs') %></div>
     <!--PATIENTS SECTION-->
-    <div id="patientSection" style="display: none;">
+    <div id="patientSection" style="display: block;">
         <h1>PATIENTS PORTAL</h1>
 
         <!-- patients signup -->
-        <div class="" id="Pts">
+        <div class="" id="Pts" style="display: none;">
             <h3>Sign Up</h3>
             <form action="/patients/signup" method="POST">
                 <div>
@@ -126,8 +44,10 @@
                 <p>Registered Patients; <a href="#" onclick="patientPtL('Ptl')">Login</a></p>
             </form>
         </div>
+
+
         <!-- patients login -->
-        <div class="" id="Ptl" style="display: none;">
+        <div class="" id="Ptl">
             <h3>Login</h3>
             <form action="/patients/login" method="POST">
                 <div>
@@ -140,57 +60,6 @@
                 </div>
                 <button type="submit">Login</button>
                 <p>Not registered patients; <a href="#" onclick="patientPtS('Pts')">Create Account</a></p>
-            </form>
-        </div>
-    </div>
-
-
-    <!--ADMIN SECTION-->
-    <div id="adminSection" style="display: none;">
-        <h1>ADMIN PORTAL</h1>
-
-        <!-- admins signup -->
-        <div id="as">
-            <h3>Sign Up</h3>
-            <form action="/admins/signup" method="POST">
-                <div>
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div>
-                    <label for="admin_code">Admin_code:</label>
-                    <input type="text" id="admin_code" name="admin_code" required>
-                </div>
-                <div>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div>
-                    <label for="confirm_password">Confirm Password:</label>
-                    <input type="password" id="password" name="confirm_password" required>
-                </div>
-                <button type="submit">Sign Up</button>
-                <p class=""><a href="#" onclick="adminL('al')">Login</a></p>
-            </form>
-        </div>
-        <!-- admins login -->
-        <div class="" id="al" style="display: none;">
-                <h3>Login</h3>
-            <form action="/admins/login" method="POST">
-                <div>
-                    <label for="email">Email</label>
-                    <input type="email" name="email" placeholder="Email" required>
-                </div>
-                <div>
-                    <label for="password">Password</label>
-                    <input type="password" name="password" placeholder="Password" required>
-                </div>
-                <button type="submit">Login</button>
-                <p class=""><a href="#" onclick="adminS('as')">Create Account</a></p>
             </form>
         </div>
     </div>
@@ -271,4 +140,5 @@
     });
 });
 </script>
+
 </html>

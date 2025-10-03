@@ -1,9 +1,11 @@
+// routes/providersRouters.js
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
 const session = require('express-session');
 const { requireLogin } = require('../middleware/auth');
 const bcrypt = require('bcrypt');
+const { verify } = require('jsonwebtoken');
 const saltRounds = 10;
 
 //===================================================================================================
@@ -64,8 +66,12 @@ router.post('/login', async (req, res) => {
                         firstName: user.first_name,
                         lastName: user.last_name,
                         email: user.email,
+                        specialty: user.specialty,
+                        verify: user.verify,
+                        language: user.language,
+                        location: user.location,
                     };
-                    req.flash('success', 'Successfuly Signed Up');
+                    req.flash('success', 'Successfuly Logged in');
                     res.redirect('/providers/provider_dashboard');
                 });
             } else {
@@ -97,85 +103,152 @@ router.post('/respond', requireLogin, (req, res) => {
     });
 });
 
+// Update provider's specialty
+router.post('/update-specialty', requireLogin, (req, res) => {
+    const { providerId, specialty } = req.body;
+    if (!providerId || !specialty) {
+        req.flash('error', 'Provider ID and specialty are required.');
+        return res.redirect('/providers/provider_dashboard');
+    }
+    const sql = 'UPDATE providers SET specialty = ? WHERE provider_id = ?';
+    db.query(sql, [specialty, providerId], (err, result) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to update specialty.');
+            return res.redirect('/providers/provider_dashboard');
+        }
+        req.flash('success', 'Specialty updated successfully.');
+        res.redirect('/providers/provider_dashboard');
+    });
+});
+
+// Update provider's location
+router.post('/update-location', requireLogin, (req, res) => {
+    const { providerId, location } = req.body;
+    if (!providerId || !location) {
+        req.flash('error', 'Provider ID or location column are required.');
+        return res.redirect('/providers/provider_dashboard');
+    }
+    const sql = 'UPDATE providers SET location = ? WHERE provider_id = ?';
+    db.query(sql, [location, providerId], (err, result) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to add location.');
+            return res.redirect('/providers/provider_dashboard');
+        }
+        req.flash('success', 'location added successfully.');
+        res.redirect('/providers/provider_dashboard');
+    });
+});
+
+// Update provider's language
+router.post('/update-language', requireLogin, (req, res) => {
+    const { providerId, language } = req.body;
+    if (!providerId || !language) {
+        req.flash('error', 'Provider ID or language column are required.');
+        return res.redirect('/providers/provider_dashboard');
+    }
+    const sql = 'UPDATE providers SET language = ? WHERE provider_id = ?';
+    db.query(sql, [language, providerId], (err, result) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to add language.');
+            return res.redirect('/providers/provider_dashboard');
+        }
+        req.flash('success', 'language added successfully.');
+        res.redirect('/providers/provider_dashboard');
+    });
+});
+
+// Delete provider's account
+router.post('/delete-account', requireLogin, (req, res) => {
+    const { providerId } = req.body;
+    if (!providerId) {
+        req.flash('error', 'Provider ID is required.');
+        return res.redirect('/providers/provider_dashboard');
+    }
+
+    // First, delete all appointments for the provider
+    const deleteAppointmentsSql = 'DELETE FROM appointment WHERE provider_id = ?';
+    db.query(deleteAppointmentsSql, [providerId], (err, result) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to delete appointments.');
+            return res.redirect('/providers/provider_dashboard');
+        }
+
+        // Then, delete the provider
+        const deleteProviderSql = 'DELETE FROM providers WHERE provider_id = ?';
+        db.query(deleteProviderSql, [providerId], (err, result) => {
+            if (err) {
+                console.log(err);
+                req.flash('error', 'Failed to delete account.');
+                return res.redirect('/providers/provider_dashboard');
+            }
+            req.session.destroy(err => {
+                if (err) {
+                    console.log(err);
+                    req.flash('error', 'Failed to log out.');
+                    return res.redirect('/providers/provider_dashboard');
+                }
+                req.flash('success', 'Account deleted successfully.');
+                res.redirect('/account/provider_a');
+            });
+        });
+    });
+});
 
 //==================================================================================================
                              // GET METHOD
-//admin dashboard route
+// Dashboard routes  
 router.get('/provider_dashboard', requireLogin, (req, res) => {
     if (!req.session.user) {
-        return res.redirect('/account/user')
+        return res.redirect('/account/user');
     }
-    res.render('providersDashboard', { user: req.session.user })
-});
-
-// Pending patients appointment
-router.get('/pending', requireLogin, (req, res) => {
-    const sql = `
-    SELECT p.first_name AS patient_first_name, p.last_name AS patient_last_name, a.appointment_id AS appointment_id, a.appointment_date, a.appointment_time, a.status
-    FROM appointment a
-    JOIN patients p ON a.patient_id = p.patient_id
-    WHERE a.provider_id = ? AND a.status = 'pending'
-    `;
-    console.log("Provider ID from session:", req.session.user.id, typeof req.session.user.id);
-
-    db.query(sql, [req.session.user.id], (err, appointment) => {
+    // Fetch provider's specialty
+    const sql = 'SELECT specialty FROM providers WHERE provider_id = ?';
+    db.query(sql, [req.session.user.id], (err, result) => {
         if (err) {
             console.log(err);
-            req.flash('error', 'Failed to fetch appointments');
             return res.redirect('/providers/provider_dashboard');
         }
+        const specialty = result.length > 0 ? result[0].specialty : null;
         res.render('providersDashboard', {
-            appointments: appointment,
-            user: req.session.user,
+            user: { ...req.session.user, specialty: specialty},
+            status: '',
+            appointments: '',
             messages: req.flash()
         });
     });
 });
 
-// Accepted patients appointment
-router.get('/accepted', requireLogin, (req, res) => {
-    const sql = `
-    SELECT p.first_name AS patient_first_name, p.last_name AS patient_last_name, a.appointment_id AS appointment_id, a.appointment_date, a.appointment_time, a.status
-    FROM appointment a
-    JOIN patients p ON a.patient_id = p.patient_id
-    WHERE a.provider_id = ? AND a.status = 'accepted'
-    `;
-    console.log("Provider ID from session:", req.session.user.id, typeof req.session.user.id);
+//Appointments status filter 
+router.get('/appointments', requireLogin, (req, res) => {
+    const status = req.query.status || 'pending';
+    if (!['pending', 'accepted', 'cancelled'].includes(status)) {
+        req.flash('error', 'Invalid status');
+        return res.redirect('/providers/provider_dashboard');
+    }
 
-    db.query(sql, [req.session.user.id], (err, appointment) => {
+    const sql = `
+        SELECT p.first_name AS patient_first_name, p.last_name AS patient_last_name,
+               a.appointment_id AS appointment_id, a.appointment_date, a.appointment_time, a.status
+        FROM appointment a
+        JOIN patients p ON a.patient_id = p.patient_id
+        WHERE a.provider_id = ? AND a.status = ?
+    `;
+
+    db.query(sql, [req.session.user.id, status], (err, appointments) => {
         if (err) {
             console.log(err);
             req.flash('error', 'Failed to fetch appointments');
             return res.redirect('/providers/provider_dashboard');
         }
         res.render('providersDashboard', {
-            appointments: appointment,
+            appointments: appointments,
             user: req.session.user,
-            messages: req.flash()
-        });
-    });
-});
-
-// Cancelled Patients appointment
-router.get('/cancelled', requireLogin, (req, res) => {
-    const sql = `
-    SELECT p.first_name AS patient_first_name, p.last_name AS patient_last_name, a.appointment_id AS appointment_id, a.appointment_date, a.appointment_time, a.status
-    FROM appointment a
-    JOIN patients p ON a.patient_id = p.patient_id
-    WHERE a.provider_id = ? AND a.status = 'cancelled'
-    `;
-    console.log("Provider ID from session:", req.session.user.id, typeof req.session.user.id);
-
-    db.query(sql, [req.session.user.id], (err, appointment) => {
-        if (err) {
-            console.log(err);
-            req.flash('error', 'Failed to fetch appointments');
-            return res.redirect('/providers/provider_dashboard');
-        }
-        res.render('providersDashboard', {
-            appointments: appointment,
-            user: req.session.user,
-            messages: req.flash()
+            messages: req.flash(),
+            status: status
         });
     });
 });
@@ -190,11 +263,11 @@ router.get('/logout', (req, res) => {
     });
 });
 
-
 //==================================================================================================
                              // UPDATE METHOD
 //=====================================================================================================
                              // DELETE METHOD
+
 
 
 module.exports = router;

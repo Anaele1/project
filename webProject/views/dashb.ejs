@@ -1,37 +1,364 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet', href='/stylesheets/style.css'>
-    <title>Document</title>
-</head>
-<body>
-    <main>
-        <header>
-        <%- include ('partials/header.ejs') %>
-        </header>
-        <a href="/">Go back Home</a><br><br>
-        WELCOME TO ADMIN DASHBOARD
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel='stylesheet', href='/stylesheets/style.css'>
+        <title>Document</title>
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            .chart-container {
+                width: 200px;
+                height: 200px;
+                margin: 20px auto;
+            }
 
-        <div>
-            <h1>Welcome, <%= user.name %> </h1>
-            <p>Code, <%= user.code %> </p>
-            <b><p>Email, <%= user.email %> </p></b>
-        </div>
+            .section {
+                display: none;
+                margin: 20px 0;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            button {
+                margin: 5px;
+                padding: 8px 12px;
+                cursor: pointer;
+            }
 
-        <!-- appointments -->
-        <a href="/admins/appointments">Manage Appointments</a>
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="admin_wrapper">
 
-        <!-- Logout Link -->
-        <a href="/admins/logout">Logout</a>
+                <!-- Top section -->
+                <div id="top_section">
+                    <b>ADMIN DASHBOARD</b><br>
+                    <header><%- include ('partials/header.ejs') %></header>
+                </div>
 
-        <!-- footer section  -->
-        <footer>
-            <%- include ('partials/footer.ejs') %>
-        </footer>
-    </main>
+                <!-- Left side section -->
+                <div id="left_section">
+                    <a href="/">Home</a><br>
+                    <a href="/@">Profile</a><br>
+                    <a href="/@">Report</a><br>
+                    <a href="/admins/appointments">Manage Appointments</a><br><br>
+                    <!-- Logout Link -->
+                    <a href="/admins/logout">Logout</a>
+                </div>
 
+                <!-- Center section -->
+                <div id="center_section">
+                    <!-- Users details -->
+                    <div>
+                        <h1>Welcome, <%= user.name %> </h1>
+                        <b><%= user.code %> </b>
+                    </div><br>
 
-</body>
+                    <!-- Center header -->
+                    <div>
+                        <!-- appointments -->
+                        <button onclick="toggleSection('patientsSection')">View All Patients</button>
+                        <button onclick="toggleSection('patientsWithoutAppointmentSection')">Patients Without Appointment</button>
+                        <button onclick="toggleSection('patientsWithAppointmentSection')">Patients With Appointment</button>
+                        <button onclick="toggleSection('providersSection')">View All Providers</button>
+                        <button onclick="toggleSection('providersWithoutAppointmentSection')">Providers Without Appointment</button>
+                        <button onclick="toggleSection('providersWithAppointmentSection')">Providers With Appointment</button>
+                    </div>
+
+                    <!-- Center body -->
+                    <div>
+                        <!-- Patients Section -->
+                        <div id="patientsSection" class="section">
+                            <h2>All Patients</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.patients) { %>
+                                        <% patients.forEach(patient => { %>
+                                            <tr>
+                                                <td><%= patient.patient_id %></td>
+                                                <td><%= patient.first_name %></td>
+                                                <td><%= patient.last_name %></td>
+                                                <td><%= patient.email %></td>
+                                                <td>
+                                                    <form action="/admins/patients/delete" method="POST">
+                                                        <input type="hidden" name="patient_id" value="<%= patient.patient_id %>">
+                                                        <button type="submit">Delete</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Patients Without Appointment Section -->
+                        <div id="patientsWithoutAppointmentSection" class="section">
+                            <h2>Patients Without Appointment</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.patientsWithoutAppointment) { %>
+                                        <% patientsWithoutAppointment.forEach(patient => { %>
+                                            <tr>
+                                                <td><%= patient.patient_id %></td>
+                                                <td><%= patient.first_name %></td>
+                                                <td><%= patient.last_name %></td>
+                                                <td><%= patient.email %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Patients With Appointment Section -->
+                        <div id="patientsWithAppointmentSection" class="section">
+                            <h2>Patients With Appointment</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.patientsWithAppointment) { %>
+                                        <% patientsWithAppointment.forEach(patient => { %>
+                                            <tr>
+                                                <td><%= patient.patient_id %></td>
+                                                <td><%= patient.first_name %></td>
+                                                <td><%= patient.last_name %></td>
+                                                <td><%= patient.email %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Providers Section -->
+                        <div id="providersSection" class="section">
+                            <h2>All Providers</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Specialty</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.providers) { %>
+                                        <% providers.forEach(provider => { %>
+                                            <tr>
+                                                <td><%= provider.provider_id %></td>
+                                                <td><%= provider.first_name %></td>
+                                                <td><%= provider.last_name %></td>
+                                                <td><%= provider.email %></td>
+                                                <td><%= provider.specialty %></td>
+                                                <td>
+                                                    <form action="/admins/providers/delete" method="POST">
+                                                        <input type="hidden" name="provider_id" value="<%= provider.provider_id %>">
+                                                        <button type="submit">Delete</button>
+                                                    </form>
+                                                    <% if (provider.verify === 'verifying') { %>
+                                                        <form action="/admins/verify" method="POST">
+                                                            <input type="hidden" name="provider_id" value="<%= provider.provider_id %>">
+                                                            <button type="submit" name="action" value="verified">Verify</button>
+                                                            <button type="submit" name="action" value="declined">Decline</button>
+                                                        </form>
+                                                    <% } else if (provider.verify === 'verified') { %>
+                                                        <form action="/admins/verify" method="POST">
+                                                            <input type="hidden" name="provider_id" value="<%= provider.provider_id %>">
+                                                            <button>Verified</button>
+                                                            <button type="submit" name="action" value="declined">Decline</button>
+                                                        </form>
+                                                    <% } else if (provider.verify === 'declined') { %>
+                                                        <form action="/admins/verify" method="POST">
+                                                            <input type="hidden" name="provider_id" value="<%= provider.provider_id %>">
+                                                            <button type="submit" name="action" value="verified">Verify</button>
+                                                            <button>Declined</button>
+                                                        </form>
+                                                    <% } %>
+                                                    
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Providers Without Appointment Section -->
+                        <div id="providersWithoutAppointmentSection" class="section">
+                            <h2>Providers Without Appointment</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Specialty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.providersWithoutAppointment) { %>
+                                        <% providersWithoutAppointment.forEach(provider => { %>
+                                            <tr>
+                                                <td><%= provider.provider_id %></td>
+                                                <td><%= provider.first_name %></td>
+                                                <td><%= provider.last_name %></td>
+                                                <td><%= provider.email %></td>
+                                                <td><%= provider.specialty %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Providers With Appointment Section -->
+                        <div id="providersWithAppointmentSection" class="section">
+                            <h2>Providers With Appointment</h2>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        <th>Specialty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.providersWithAppointment) { %>
+                                        <% providersWithAppointment.forEach(provider => { %>
+                                            <tr>
+                                                <td><%= provider.provider_id %></td>
+                                                <td><%= provider.first_name %></td>
+                                                <td><%= provider.last_name %></td>
+                                                <td><%= provider.email %></td>
+                                                <td><%= provider.specialty %></td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right side section -->
+                <div id="right_section">
+                    <!-- Pie Chart Section -->
+                    <div class="chart-container">
+                        <h2>Appointment Status Overview</h2>
+                        <canvas id="appointmentPieChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Footer section -->
+                <div id="footer_section"> <%- include ('partials/footer.ejs') %></div>
+            </div>
+        </main>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <script>
+            // Toggle section visibility
+            function toggleSection(sectionId) {
+                const sections = document.querySelectorAll('.section');
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                document.getElementById(sectionId).style.display = 'block';
+            }
+
+            // Render the pie chart with dynamic data
+            window.onload = function() {
+                // Use the data passed from the backend
+                const statusCounts = {
+                    pending: <%= statusCounts.pending || 0 %>,
+                    accepted: <%= statusCounts.accepted || 0 %>,
+                    cancelled: <%= statusCounts.cancelled || 0 %>
+                };
+
+                const data = {
+                    labels: ['Pending', 'Accepted', 'Cancelled'],
+                    datasets: [{
+                        data: [statusCounts.pending, statusCounts.accepted, statusCounts.cancelled],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                const config = {
+                    type: 'pie',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Appointment Status Distribution'
+                            }
+                        }
+                    }
+                };
+
+                const ctx = document.getElementById('appointmentPieChart').getContext('2d');
+                new Chart(ctx, config);
+            };
+        </script>
+    </body>
 </html>
