@@ -1,12 +1,15 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: aquamarine;
-  width: fit-content;
-  max-height: max-content;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 a {
-  color: #00B7FF;
+  text-decoration: none;
 }
 
 p {
@@ -14,7 +17,7 @@ p {
 }
 
 /* Hide by default */
-.profileEdit, .section, #viewAppointments, #providersList{
+.profileEdit, .section, #appointmentStatus, #viewAppointments, #providersList{
   display: none;
 }
 
@@ -22,7 +25,8 @@ p {
   display: grid;
   overflow: auto;
   height: 100%;
-  grid-template-columns: 150px 1000px 271px;
+  gap: 8px;
+  grid-template-columns: 150px 900px 271px;
   grid-template-rows: 80px 100% 200px;
   grid-template-areas: 'top_section top_section top_section' 'left_section center_section right_section' 'footer_section footer_section footer_section';
 }
@@ -30,7 +34,9 @@ p {
 .users_wrapper{
   display: grid;
   overflow: auto;
-  grid-template-columns: 200px 1300px;
+  height: 100%;
+  gap: 8px;
+  grid-template-columns: 250px 1100px;
   grid-template-rows: 80px 100% 200px;
   grid-template-areas: 'users_top users_top' 'users_left users_container' 'users_footer users_footer';
 }
@@ -39,24 +45,21 @@ p {
 /* Top section styling */
 #top_section{
   grid-area: top_section;
-  /* background: green; */
 }
 
 #users_top{
   grid-area: users_top;
-  /* background: green; */
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////// */
 /* Left side section styling */
 #left_section{
   grid-area: left_section;
-  /* background: palegoldenrod; */
+  padding: 2rem;
 }
 
 #users_left{
   grid-area: users_left;
-  /* background: palegoldenrod; */
 }
 
 
@@ -64,19 +67,18 @@ p {
 /* Center section styling */
 #center_section{
   grid-area: center_section;
-  /* background: snow; */
+  padding: 2px 2px;
+  margin: 0;
 }
 
 #users_container{
   grid-area: users_container;
-  background: snow;
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////// */
 /* Right side section styling */
 #right_section{
   grid-area: right_section;
-  /* background: fuchsia; */
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////// */
@@ -92,6 +94,11 @@ p {
 }
 
 /* /////////////////////////////////////////////////////////////////////////////////////////// */
+
+#right_section, #users_left, #top_section, #users_top, #left_section{
+  background-color: rgb(108, 252, 204);
+  border-radius: 7px;
+}
 
 
  /* Style the pop-up container */
@@ -145,4 +152,37 @@ p {
   font-size: 20px;
   margin-left: 5px;
   color: red;
+}
+
+.dViews{
+  display: grid;
+  grid-template-columns: 3fr 3fr 3fr;
+  gap: 2rem;
+  padding: 20px;
+  justify-items: center;
+}
+
+.dViewsList{
+  background-color: #e8f4f8;
+  width: 60%;
+  height: 10rem;
+  opacity: 1;
+}
+
+.cHeader{
+  border: 1.3px solid rgb(68, 252, 221);
+  border-radius: 1rem;
+}
+
+.cHeader>button, .cHeader>a{
+  border: none;
+  font-size: 10px;
+  background: white;
+  color: black;
+}
+
+.dViewsList>p{
+  text-align: center;
+  color: #fa2b2b;
+  font-weight: 800;
 }

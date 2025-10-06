@@ -104,10 +104,38 @@
           </div><br>
 
           <!-- Usera container header -->
-          <div>
+          <div class="cHeader">
             <a href="/providers/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Pending Appointments</a>
             <a href="/providers/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">Accepted Appointments</a>
             <a href="/providers/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a>
+          </div>
+
+          <!-- Dashboard Views -->
+          <div class="dViews" id="dv">
+              <a class="dViewsList">
+                  <h3>Total Appointments</h3>
+                  <p>2222222</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Total Patients</h3>
+                  <p>1111111</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Total Providers</h3>
+                  <p>555555555</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Emergencies</h3>
+                  <p>999999999</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Reports</h3>
+                  <p>55578908</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Cancelled Appointments</h3>
+                  <p>2222222</p>
+              </a>
           </div>
 
           <!-- Profile Modal -->

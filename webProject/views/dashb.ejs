@@ -70,7 +70,7 @@
                     </div><br>
 
                     <!-- Center header -->
-                    <div>
+                    <div class="cHeader">
                         <!-- appointments -->
                         <button onclick="toggleSection('patientsSection')">View All Patients</button>
                         <button onclick="toggleSection('patientsWithoutAppointmentSection')">Patients Without Appointment</button>
@@ -82,6 +82,34 @@
 
                     <!-- Center body -->
                     <div>
+                        <!-- Dashboard Views -->
+                        <div class="dViews" id="dv">
+                            <a class="dViewsList">
+                                <h3>Total Appointments</h3>
+                                <p>2222222</p>
+                            </a>
+                            <a class="dViewsList">
+                                <h3>Total Patients</h3>
+                                <p>1111111</p>
+                            </a>
+                            <a class="dViewsList">
+                                <h3>Total Providers</h3>
+                                <p>555555555</p>
+                            </a>
+                            <a class="dViewsList">
+                                <h3>Emergencies</h3>
+                                <p>999999999</p>
+                            </a>
+                            <a class="dViewsList">
+                                <h3>Reports</h3>
+                                <p>55578908</p>
+                            </a>
+                            <a class="dViewsList">
+                                <h3>Cancelled Appointments</h3>
+                                <p>2222222</p>
+                            </a>
+                        </div>
+
                         <!-- Patients Section -->
                         <div id="patientsSection" class="section">
                             <h2>All Patients</h2>
@@ -309,6 +337,7 @@
                 sections.forEach(section => {
                     section.style.display = 'none';
                 });
+                document.getElementById('dv').style.display = 'none';
                 document.getElementById(sectionId).style.display = 'block';
             }
 
