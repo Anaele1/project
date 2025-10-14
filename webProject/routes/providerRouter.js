@@ -118,7 +118,7 @@ router.post('/update-specialty', requireLogin, (req, res) => {
             return res.redirect('/providers/provider_dashboard');
         }
         req.flash('success', 'Specialty updated successfully.');
-        res.redirect('/providers/provider_dashboard');
+        res.redirect('/providers/providerProfile');
     });
 });
 
@@ -137,7 +137,7 @@ router.post('/update-location', requireLogin, (req, res) => {
             return res.redirect('/providers/provider_dashboard');
         }
         req.flash('success', 'location added successfully.');
-        res.redirect('/providers/provider_dashboard');
+        res.redirect('/providers/providerProfile');
     });
 });
 
@@ -156,7 +156,7 @@ router.post('/update-language', requireLogin, (req, res) => {
             return res.redirect('/providers/provider_dashboard');
         }
         req.flash('success', 'language added successfully.');
-        res.redirect('/providers/provider_dashboard');
+        res.redirect('/providers/providerProfile');
     });
 });
 
@@ -268,6 +268,11 @@ router.get('/logout', (req, res) => {
 //=====================================================================================================
                              // DELETE METHOD
 
+//provider profile
+router.get('/providerProfile', requireLogin, (req, res) => {
+    console.log(req.user);
+    res.render('providersProfile', { user: req.user });
+});
 
 
 module.exports = router;

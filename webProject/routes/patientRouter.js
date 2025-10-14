@@ -65,6 +65,8 @@ router.post('/login', async (req, res) => {
                         firstName: user.first_name,
                         lastName: user.last_name,
                         email: user.email,
+                        language: user.language,
+                        location: user.location,
                     };
                     req.flash('success', 'Successfuly Logged in');
                     res.redirect('/patients/patient_dashboard');
@@ -119,10 +121,97 @@ router.post('/book', requireLogin, async (req, res) => {
     });
 });
 
+// Update provider's location
+router.post('/update-location', requireLogin, (req, res) => {
+    const { patientId, location } = req.body;
+    if (!patientId || !location) {
+        req.flash('error', 'Patient ID or location column are required.');
+        return res.redirect('/patients/patientProfile');
+    }
+    const sql = 'UPDATE patients SET location = ? WHERE patient_id = ?';
+    db.query(sql, [location, patientId], (err, result) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to add location.');
+            return res.redirect('/patients/patientProfile');
+        }
+        req.flash('success', 'location added successfully.');
+        res.redirect('/patients/patientProfile');
+    });
+});
+
+// Update atient's language
+router.post('/update-language', requireLogin, (req, res) => {
+    const { patientId, language } = req.body;
+    if (!patientId || !language) {
+        req.flash('error', 'Patient ID or language column are required.');
+        return res.redirect('/patients/patientProfile');
+    }
+    const sql = 'UPDATE patients SET language = ? WHERE patient_id = ?';
+    db.query(sql, [language, patientId], (err, result) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to add language.');
+            return res.redirect('/patients/patientProfile');
+        }
+        req.flash('success', 'language added successfully.');
+        res.redirect('/patients/patientProfile');
+    });
+});
+
+// Delete patient account
+router.post('/delete-account', requireLogin, (req, res) => {
+    const { patientId } = req.body;
+    if (!patientId) {
+        req.flash('error', 'Patients ID is required.');
+        return res.redirect('/patients/patientProfile');
+    }
+
+    // First, delete all appointments for the provider
+    const deleteAppointmentsSql = 'DELETE FROM appointment WHERE patient_id = ?';
+    db.query(deleteAppointmentsSql, [patientId], (err, result) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to delete your appointments.');
+            return res.redirect('/patients/patientProfile');
+        }
+
+        // Then, delete the provider
+        const deletePatientSql = 'DELETE FROM patients WHERE patient_id = ?';
+        db.query(deletePatientSql, [patientId], (err, result) => {
+            if (err) {
+                console.log(err);
+                req.flash('error', 'Failed to delete account.');
+                return res.redirect('/patients/patientProfile');
+            }
+            req.session.destroy(err => {
+                if (err) {
+                    console.log(err);
+                    req.flash('error', 'Failed to log out.');
+                    return res.redirect('/patients/patientProfile');
+                }
+                req.flash('success', 'Account deleted successfully.');
+                res.redirect('/');
+            });
+        });
+    });
+});
 //===================================================================================================
                             // GET METHOD
-// View all providers on patient's dashboard
+// Patient's dashboard
 router.get('/patient_dashboard', requireLogin, (req, res) => {
+
+    res.render('patientsDashboard', {user: req.session.user, messages: req.flash() });
+});
+
+//Patients profile
+router.get('/patientProfile', requireLogin, (req, res) => {
+    console.log(req.user);
+    res.render('patientsProfile', { user: req.user });
+});
+
+//Patients appointments
+router.get('/userAppointment', requireLogin, (req, res) => {
     const providerSql = 'SELECT * FROM providers WHERE verify = "verified"';
     const appointmentSql = `
         SELECT a.*, p.first_name as provider_first_name, p.last_name as provider_last_name, a.status
@@ -142,7 +231,7 @@ router.get('/patient_dashboard', requireLogin, (req, res) => {
                 req.flash('error', 'Failed to fetch appointments');
                 return res.redirect('/patients/patient_dashboard');
             }
-            res.render('patientsDashboard', { specialty: '', providers, appointments, user: req.session.user, messages: req.flash() });
+            res.render('usersAppointment', { specialty: '', providers, appointments, user: req.session.user, messages: req.flash() });
         });
     });
 });
@@ -161,10 +250,5 @@ router.get('/logout', (req, res) => {
                             // UPDATE METHOD
 //====================================================================================================
                             // DELETE METHOD
-
-
-
-
-
 
 module.exports = router;

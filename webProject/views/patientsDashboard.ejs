@@ -7,161 +7,75 @@
   <link rel='stylesheet', href='/stylesheets/style.css'>
   <title> patient dashboard</title>
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer></script>
-  <style>
-    #map {
-      height: 200px;
-      width: 100%;
-      margin: 20px 0;
-    }
-    #pac-input {
-      background-color: #fff;
-      font-family: Roboto;
-      font-size: 15px;
-      font-weight: 300;
-      margin-left: 12px;
-      padding: 0 11px 0 13px;
-      text-overflow: ellipsis;
-      width: 400px;
-      height: 40px;
-      margin-bottom: 10px;
-    }
-  </style>
 </head>
   <body>
     <main>
       <div class="users_wrapper">
 
         <!--users top section -->
-        <div id="users_top">
+        <div id="users_top" class="top">
           <b>PATIENT DASHBOARD</b>
           <header><%- include ('partials/header.ejs') %></header>
         </div>
 
         <!-- users left section -->
         <div id="users_left">
-          <a href="/">Home</a><br>
-          <span class="profile-link" onclick="openProfileModal()">Profile</span><br>
-          <a href="/">Report</a><br>
+          <a href="/patients/userAppointment">Appointments</a><br><br>
+          <a href="/patients/patientProfile">Profile</a><br><br>
+          <a href="/#">Report</a><br><br><br>
           <!-- Logout Link -->
           <a href="/patients/logout">Logout</a>
         </div>
 
         <!-- users container -->
         <div id="users_container">
+
+          <!-- Location search btn-->
+          <button id="locationBtn" style=" float: right; margin-right: 5rem;">Health Centers Near You</button><span id="locationBarClose" style="color: rgb(248, 139, 139); float: right; margin-right: 5rem; display: none; font-weight: 900; font-size: 32px;">&times;</span>
+
           <!-- Users detailsS -->
           <div>
             <h1>Welcome <%= user.firstName %> </h1>
           </div>
+          
+          <!-- Google Map Section -->
+          <div id="mapContainer">
+              <input id="pac-input" type="text" placeholder="Search for health centers...">
+              <div id="map"></div>
+          </div>
 
           <!-- Users header -->
           <div class="cHeader">
-            <button id="viewProviders">View Providers</button>
-            <button id="viewAppointmentBtn">View Appointments</button>
+            <!-- <a id="viewProviders" href="/patients/verified_providers">Appointments View Providers</a>
+            <a id="viewAppointmentBtn" href="/patients/userAppointment">Appointments</a> -->
           </div>
 
           <!-- Dashboard Views -->
           <div class="dViews" id="dv">
               <a class="dViewsList">
-                  <h3>Total Appointments</h3>
+                  <h3>Pending Appointments</h3>
                   <p>2222222</p>
-              </a>
-              <a class="dViewsList">
-                  <h3>Total Patients</h3>
-                  <p>1111111</p>
-              </a>
-              <a class="dViewsList">
-                  <h3>Total Providers</h3>
-                  <p>555555555</p>
-              </a>
-              <a class="dViewsList">
-                  <h3>Emergencies</h3>
-                  <p>999999999</p>
-              </a>
-              <a class="dViewsList">
-                  <h3>Reports</h3>
-                  <p>55578908</p>
               </a>
               <a class="dViewsList">
                   <h3>Cancelled Appointments</h3>
+                  <p>1111111</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Accepted Appointments</h3>
+                  <p>555555555</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Your Providers</h3>
+                  <p>999999999</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Providers Online </h3>
+                  <p>55578908</p>
+              </a>
+              <a class="dViewsList">
+                  <h3>Recommendations</h3>
                   <p>2222222</p>
               </a>
-          </div>
-
-          <div style="display: none;">
-  <!-- Search Input -->
-  <h2>View all providers</h2>
-  <input type="text" id="searchInput" placeholder="Search by name or specialty..." title="Type in a name or specialty">
-
-  <!-- Appointments Table -->
-  <table border="2" id="providersTable">
-      <thead>
-          <tr>
-              <th>Provider Name</th>
-              <th>Specialty</th>
-          </tr>
-      </thead>
-      <tbody>
-          <% providers.forEach(provider => { %>
-          <tr>
-              <td><%= provider.first_name %> <%= provider.last_name %></td>
-              <td><%= provider.specialty %></td>
-              <td>
-                <form action="">
-                  <button>book Appointment</button>
-                </form>
-              </td>
-          </tr>
-          <% }); %>
-      </tbody>
-  </table>
-          </div>
-
-          <!-- Providers list -->
-          <ul id="providersList">
-    <span class="editClose" id="viewProvidersClose">&times;</span>
-    <h2>Available Providers</h2>
-    <% if (typeof providers !== 'undefined' && providers.length) { %>
-      <% providers.forEach(provider => { %>
-        <li>
-          <%= provider.first_name %> <%= provider.last_name %>
-          <form action="/patients/book" method="POST">
-            <input type="hidden" name="providerId" value="<%= provider.provider_id %>">
-            <input type="date" name="date" required>
-            <input type="time" name="time" required>
-            <button type="submit">Request Appointment</button>
-          </form>
-        </li>
-      <% }); %>
-    <% } else { %>
-      <li>No providers available.</li>
-    <% } %>
-          </ul>
-
-          <!-- View Appointments -->
-          <ul id="viewAppointments">
-      <span class="editClose" id="viewAppointmentClose">&times;</span>
-      <h3>Your Appointments</h3>
-      <% if (typeof appointments !== 'undefined' && appointments.length) { %>
-        <% appointments.forEach(appointment => { %>
-          <li>
-            <p>
-              <strong>Provider:</strong> <%= appointment.provider_first_name %> <%= appointment.provider_last_name %><br>
-              <strong>Date:</strong> <%= appointment.appointment_date %><br>
-              <strong>Time:</strong> <%= appointment.appointment_time %><br>
-              <strong>Status:</strong> <%= appointment.status %>
-            </p>
-          </li>
-        <% }); %>
-      <% } else { %>
-        <li>No appointments found.</li>
-      <% } %>
-          </ul>
-
-          <!-- Google Map Section -->
-          <div style="display: none;">
-            <h2>Find Health Centers Near You</h2>
-            <input id="pac-input" type="text" placeholder="Search for health centers...">
-            <div id="map"></div>
           </div>
 
           <!-- Live Chat Section -->
@@ -181,6 +95,22 @@
 
       </div>
     </main>
+
+    <!-- Location map toggle -->
+    <script>
+      document.getElementById("locationBtn").addEventListener("click", function() {
+        document.getElementById("mapContainer").style.display = "block";
+        document.getElementById("locationBtn").style.display = "none";
+        document.getElementById("locationBarClose").style.display = "block";
+      });
+
+      document.getElementById("locationBarClose").addEventListener("click", function() {
+        document.getElementById("locationBarClose").style.display = "none";
+        document.getElementById("locationBtn").style.display = "block";
+        document.getElementById("mapContainer").style.display = "none";
+      });
+
+    </script>
 
     <!-- Initialize the map -->
     <script>
@@ -275,45 +205,7 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     });
     </script>
-
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const input = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#providersTable tbody tr');
-
-            rows.forEach(row => {
-                const name = row.cells[0].textContent.toLowerCase();
-                const specialty = row.cells[1].textContent.toLowerCase();
-
-                if (name.includes(input) || specialty.includes(input)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-    </script>
-
-
-    <!-- Appointments scripts -->
-    <script>
-      document.getElementById("viewAppointmentBtn").addEventListener("click", function() {
-        document.getElementById("viewAppointments").style.display = "block";
-      });
-
-      document.getElementById("viewAppointmentClose").addEventListener("click", function() {
-        document.getElementById("viewAppointments").style.display = "none";
-      });
-
-      document.getElementById("viewProviders").addEventListener("click", function() {
-        document.getElementById("providersList").style.display = "block";
-      });
-
-      document.getElementById("viewProvidersClose").addEventListener("click", function() {
-        document.getElementById("providersList").style.display = "none";
-      });
-    </script>
-
+    
 
 
     <!-- Initialize the Chat -->

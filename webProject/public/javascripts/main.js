@@ -1,3 +1,37 @@
+  //dashboard default views and toggles
+  document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('.section');
+  sections.forEach(section => {
+      section.style.display = 'none';
+  });
+
+  // Add close buttons to each section
+  sections.forEach(section => {
+      const closeButton = document.createElement('button');
+      closeButton.textContent = 'Close';
+      closeButton.className = 'close-button';
+      closeButton.onclick = function() {
+          sections.forEach(s => s.style.display = 'none');
+          document.getElementById('dv').style.display = 'grid';
+      };
+      section.insertBefore(closeButton, section.firstChild);
+  });
+
+  // Function to toggle sections
+  function toggleSection(sectionId) {
+      // Hide all sections
+      sections.forEach(s => s.style.display = 'none');
+      // Hide dashboard views
+      document.getElementById('dv').style.display = 'none';
+      // Show the selected section
+      document.getElementById(sectionId).style.display = 'block';
+  }
+
+  // Attach toggleSection to window for button onclick
+  window.toggleSection = toggleSection;
+  });
+
+
 
  //Profle Modal functions
       function openProfileModal() {

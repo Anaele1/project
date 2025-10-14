@@ -1,0 +1,102 @@
+<!-- views/appointments -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+    <title>Manage Appointments</title>
+  </head>
+  <body>
+    <main>
+        <!-- top section -->
+        <div class="top">
+            <header>
+            <%- include ('partials/header.ejs') %>
+            </header>
+        </div>
+
+        <!-- Users header -->
+          <div class="cHeader">
+            <a href="/patients/patient_dashboard">Dashboard</a>
+            <button id="viewProviders">View Providers</button>
+            <button id="viewAppointmentBtn">View Appointments</button>
+          </div>
+
+        <!-- container section -->
+        <div class="container">
+          <!-- Providers list -->
+          <ul id="providersList">
+            <span class="editClose" id="viewProvidersClose">&times;</span>
+            <h2>Available Providers</h2>
+            <% if (typeof providers !== 'undefined' && providers.length) { %>
+              <% providers.forEach(provider => { %>
+                <li>
+                  <%= provider.first_name %> <%= provider.last_name %>
+                  <form action="/patients/book" method="POST">
+                    <input type="hidden" name="providerId" value="<%= provider.provider_id %>">
+                    <input type="date" name="date" required>
+                    <input type="time" name="time" required>
+                    <button type="submit">Book Appointment</button>
+                  </form>
+                </li>
+              <% }); %>
+              <% } else { %>
+              <li>No providers available.</li>
+            <% } %>
+          </ul>
+
+          <!-- View Appointments -->
+          <ul id="viewAppointments">
+            <span class="editClose" id="viewAppointmentClose">&times;</span>
+            <h3>Your Appointments</h3>
+            <% if (typeof appointments !== 'undefined' && appointments.length) { %>
+              <% appointments.forEach(appointment => { %>
+                <li>
+                  <p>
+                    <strong>Provider:</strong> <%= appointment.provider_first_name %> <%= appointment.provider_last_name %><br>
+                    <strong>Date:</strong> <%= appointment.appointment_date %><br>
+                    <strong>Time:</strong> <%= appointment.appointment_time %><br>
+                    <strong>Status:</strong> <%= appointment.status %>
+                  </p>
+                </li>
+              <% }); %>
+            <% } else { %>
+              <li>No appointments found.</li>
+            <% } %>
+          </ul>
+        </div>
+        
+        <!-- Footer Section -->
+        <footer>
+            <%- include ('partials/footer.ejs') %>
+        </footer>
+    </main>
+
+    <!-- Appointments scripts -->
+    <script>
+      document.getElementById("viewAppointmentBtn").addEventListener("click", function() {
+        document.getElementById("viewAppointments").style.display = "block";
+        document.getElementById("dv").style.display = "none";
+      });
+
+      document.getElementById("viewAppointmentClose").addEventListener("click", function() {
+        document.getElementById("viewAppointments").style.display = "none";
+        document.getElementById("dv").style.display = "grid";
+      });
+
+      document.getElementById("viewProviders").addEventListener("click", function() {
+        document.getElementById("providersList").style.display = "block";
+        document.getElementById("dv").style.display = "none";
+      });
+
+      document.getElementById("viewProvidersClose").addEventListener("click", function() {
+        document.getElementById("providersList").style.display = "none";
+        document.getElementById("dv").style.display = "grid";
+      });
+    </script>
+  </body>
+</html>
+
+
+

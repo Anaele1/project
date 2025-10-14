@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>provider_profile</title>
+        <link rel='stylesheet', href='/stylesheets/style.css'>
+        
+    </head>
+    <body>
+        <main>
+        <div class="users_wrapper">
+
+            <!--users top section -->
+            <div id="users_top">
+            <header><%- include ('partials/header.ejs') %></header>
+            </div>
+
+            <!-- users left section -->
+            <div id="users_left">
+            <a href="/providers/provider_dashboard">Dashboard</a>
+            </div>
+
+            <!-- users container -->
+            <div id="users_container"> 
+                <!-- Profile Modal -->
+                <div id="profileModal" class="modal">
+                    <div class="modal-content">
+                    
+                    <h2>Your Profile</h2>
+                    <p style="background: rgb(250, 63, 63); font-weight: 800; font-style: oblique; text-align: center; margin: 0 auto; width: 150px;"><strong>Account</strong> <%= user.verify %></p>
+                    <p><strong>First Name:</strong> <%= user.firstName %></p>
+                    <p><strong>Last Name:</strong> <%= user.lastName %></p>
+                    <p><strong>Email:</strong> <%= user.email %></p>
+                    <p><strong>Specialty:</strong> <span id="specialtyDisplay"><%= user.specialty || 'Not set' %><i id="specialtyEdit" class="edit">Edit</i></span>
+                    <!-- Edit Specialty Form -->
+                    <form id="editSpecialtyForm" class="profileEdit" action="/providers/update-specialty" method="POST">
+                        <input type="hidden" name="providerId" value="<%= user.id %>">
+                        <input type="text" name="specialty" placeholder="Enter new specialty" required>
+                        <button id="specialtySubmit" type="submit">Update Specialty</button><span class="editClose" id="specialtyClose">&times;</span>
+                    </form>
+                    </p>
+
+                    <p><strong>Language:</strong> <span id="languageDisplay"><%= user.language || 'Not set' %><i id="languageEdit" class="edit">Edit</i></span>
+                    <!-- Edit Language Form -->
+                    <form id="editLanguageForm" class="profileEdit" action="/providers/update-language" method="POST">
+                        <input type="hidden" name="providerId" value="<%= user.id %>">
+                        <input type="text" name="language" placeholder="Enter your languages: Native and Foreign!" required>
+                        <button id="languageSubmit" type="submit">Update Language</button><span class="editClose" id="languageClose">&times;</span>
+                    </form>
+                    </p>
+
+                    <p><strong>Location:</strong> <span id="locationDisplay"><%= user.location || 'Not set' %><i id="locationEdit" class="edit">Edit</i></span>
+                    <!-- Edit Specialty Form -->
+                    <form id="editLocationForm" class="profileEdit" action="/providers/update-location" method="POST">
+                        <input type="hidden" name="providerId" value="<%= user.id %>">
+                        <input type="text" name="location" placeholder="Enter your location: eg Region, State, Country" required>
+                        <button id="locationSubmit" type="submit">Update Location</button><span class="editClose" id="locationClose">&times;</span>
+                    </form>
+                    </p>
+
+                    <!-- Delete Account Link -->
+                    <p>
+                    <span class="delete-account" onclick="confirmDeleteAccount()">Delete Account</span>
+                    </p>
+
+                    <!-- Delete Account Form (hidden, triggered by JS) -->
+                    <form id="deleteAccountForm" action="/providers/delete-account" method="POST" style="display: none;">
+                    <input type="hidden" name="providerId" value="<%= user.id %>">
+                    <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                    <button type="submit" style="background-color: red;">Confirm Delete</button>
+                    <button type="button" onclick="cancelDeleteAccount()" style="background-color: gray;">Cancel</button>
+                    </form>
+                    </div>
+                </div>    
+            </div>
+
+            <!-- users footer -->
+            <div id="users_footer"><%- include ('partials/footer.ejs') %></div>
+
+        </div>
+        </main>
+
+    </body>
+</html>

@@ -78,7 +78,7 @@ router.post('/login', async (req, res) => {
     });
 });
 
-// POST: Delete an appointment by appointment_id
+// Delete an appointment by appointment_id
 router.post('/appointments/delete', requireLogin, (req, res) => {
     const { appointment_id } = req.body;
     if (!appointment_id) {
@@ -94,6 +94,59 @@ router.post('/appointments/delete', requireLogin, (req, res) => {
         res.redirect('/admins/appointments');
     });
 });
+
+// Delete a patient by patient_id
+router.post('/patients/delete', requireLogin, (req, res) => {
+    const { patient_id } = req.body;
+    if (!patient_id) {
+        return res.status(400).json({ error: 'patient_id is required.' });
+    }
+    const sql = 'DELETE FROM patients WHERE patient_id = ?';
+    db.query(sql, [patient_id], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.redirect('/admins/patients');
+    });
+});
+
+// POST: Delete a provider by provider_id
+router.post('/providers/delete', requireLogin, (req, res) => {
+    const { provider_id } = req.body;
+    if (!provider_id) {
+        return res.status(400).json({ error: 'provider_id is required.' });
+    }
+    const sql = 'DELETE FROM providers WHERE provider_id = ?';
+    db.query(sql, [provider_id], (err, result) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.redirect('/admins/providers');
+    });
+});
+
+// Verify providers
+router.post('/verify', requireLogin, (req, res) => {
+    const { provider_id, action } = req.body;
+    console.log("Appointment ID:", provider_id);
+    console.log("Action:", action)
+    const verify = action === 'verified' ? 'verified' : 'declined';
+    console.log("verification:", action);
+    const sql = 'UPDATE providers SET verify = ? WHERE provider_id = ?';
+    db.query(sql, [verify, provider_id], (err, result) => {
+        console.log("SQL Result:", result);
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to update appointment');
+            return res.redirect('/providers/provider_dashboard');
+        }
+        req.flash('success', `Account ${action}`);
+        res.redirect('/admins/dashboard');
+    });
+});
+
 //===================================================================================================
                             // GET METHOD
 // GET: Admin dashboard route
@@ -242,25 +295,7 @@ router.get('/appointments', requireLogin, (req, res) => {
     });
 });
 
-//logout admin
-router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).json({ error: 'Could not log out.' });
-        }
-        res.redirect('/account/admin_a');
-    });
-});
-
-
-//===================================================================================================
-                            // UPDATE METHOD
-//====================================================================================================
-                            // DELETE METHOD
-
-
-
-                            // GET: Select all patients
+//Select all patients
 router.get('/patients', requireLogin, (req, res) => {
     const sql = 'SELECT * FROM patients';
     db.query(sql, (err, patients) => {
@@ -272,23 +307,7 @@ router.get('/patients', requireLogin, (req, res) => {
     });
 });
 
-// POST: Delete a patient by patient_id
-router.post('/patients/delete', requireLogin, (req, res) => {
-    const { patient_id } = req.body;
-    if (!patient_id) {
-        return res.status(400).json({ error: 'patient_id is required.' });
-    }
-    const sql = 'DELETE FROM patients WHERE patient_id = ?';
-    db.query(sql, [patient_id], (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ error: err.message });
-        }
-        res.redirect('/admins/patients');
-    });
-});
-
-// GET: Select all patients without appointment
+// Select all patients without appointment
 router.get('/patients/without-appointment', requireLogin, (req, res) => {
     const sql = `
         SELECT p.*
@@ -305,7 +324,7 @@ router.get('/patients/without-appointment', requireLogin, (req, res) => {
     });
 });
 
-// GET: Select all providers
+// Select all providers
 router.get('/providers', requireLogin, (req, res) => {
     const sql = 'SELECT * FROM providers';
     db.query(sql, (err, providers) => {
@@ -317,23 +336,7 @@ router.get('/providers', requireLogin, (req, res) => {
     });
 });
 
-// POST: Delete a provider by provider_id
-router.post('/providers/delete', requireLogin, (req, res) => {
-    const { provider_id } = req.body;
-    if (!provider_id) {
-        return res.status(400).json({ error: 'provider_id is required.' });
-    }
-    const sql = 'DELETE FROM providers WHERE provider_id = ?';
-    db.query(sql, [provider_id], (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ error: err.message });
-        }
-        res.redirect('/admins/providers');
-    });
-});
-
-// GET: Select all providers without appointment
+// Select all providers without appointment
 router.get('/providers/without-appointment', requireLogin, (req, res) => {
     const sql = `
         SELECT pr.*
@@ -350,26 +353,20 @@ router.get('/providers/without-appointment', requireLogin, (req, res) => {
     });
 });
 
-
-// Verify providers
-router.post('/verify', requireLogin, (req, res) => {
-    const { provider_id, action } = req.body;
-    console.log("Appointment ID:", provider_id);
-    console.log("Action:", action)
-    const verify = action === 'verified' ? 'verified' : 'declined';
-    console.log("verification:", action);
-    const sql = 'UPDATE providers SET verify = ? WHERE provider_id = ?';
-    db.query(sql, [verify, provider_id], (err, result) => {
-        console.log("SQL Result:", result);
+//logout admin
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
         if (err) {
-            console.log(err);
-            req.flash('error', 'Failed to update appointment');
-            return res.redirect('/providers/provider_dashboard');
+            return res.status(500).json({ error: 'Could not log out.' });
         }
-        req.flash('success', `Account ${action}`);
-        res.redirect('/admins/dashboard');
+        res.redirect('/account/admin_a');
     });
 });
 
+
+//===================================================================================================
+                            // UPDATE METHOD
+//====================================================================================================
+                            // DELETE METHOD
 
 module.exports = router;

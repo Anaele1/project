@@ -1,3 +1,7 @@
+html{
+  overflow-x: hidden;
+}
+
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: aquamarine;
@@ -17,18 +21,18 @@ p {
 }
 
 /* Hide by default */
-.profileEdit, .section, #appointmentStatus, #viewAppointments, #providersList{
+.section, #viewAppointments, #povidersList{
   display: none;
 }
 
-.admin_wrapper{
+.admin_wrapper {
   display: grid;
-  overflow: auto;
-  height: 100%;
+  height: 100vh;
   gap: 8px;
-  grid-template-columns: 150px 900px 271px;
-  grid-template-rows: 80px 100% 200px;
+  grid-template-columns: 200px 900px 271px;
+  grid-template-rows: 80px 1fr 200px;
   grid-template-areas: 'top_section top_section top_section' 'left_section center_section right_section' 'footer_section footer_section footer_section';
+  overflow: hidden;
 }
 
 .users_wrapper{
@@ -36,7 +40,7 @@ p {
   overflow: auto;
   height: 100%;
   gap: 8px;
-  grid-template-columns: 250px 1100px;
+  grid-template-columns: 240px 1100px;
   grid-template-rows: 80px 100% 200px;
   grid-template-areas: 'users_top users_top' 'users_left users_container' 'users_footer users_footer';
 }
@@ -60,15 +64,18 @@ p {
 
 #users_left{
   grid-area: users_left;
+  padding: 2rem;
 }
 
 
 /* /////////////////////////////////////////////////////////////////////////////////////////// */
 /* Center section styling */
-#center_section{
+#center_section {
   grid-area: center_section;
-  padding: 2px 2px;
+  padding: 2px;
   margin: 0;
+  overflow: auto;
+  height: 100%;
 }
 
 #users_container{
@@ -95,7 +102,7 @@ p {
 
 /* /////////////////////////////////////////////////////////////////////////////////////////// */
 
-#right_section, #users_left, #top_section, #users_top, #left_section{
+#right_section, #users_left, #top_section, #users_top, #left_section, .top{
   background-color: rgb(108, 252, 204);
   border-radius: 7px;
 }
@@ -169,7 +176,7 @@ p {
   opacity: 1;
 }
 
-.cHeader{
+.cHeader, .top{
   border: 1.3px solid rgb(68, 252, 221);
   border-radius: 1rem;
 }
@@ -186,3 +193,30 @@ p {
   color: #fa2b2b;
   font-weight: 800;
 }
+
+/* Map and Location search style */
+ #mapContainer {
+      position: absolute;
+      top: 120px;
+      right: 0;
+      width: 60%;
+      height: 80%;
+      background: aquamarine;
+      display: none;
+      padding: 20px;
+      border-radius: 1rem;
+      border: 2px solid rgb(68, 252, 221);
+    }
+
+    #pac-input {
+      background-color: #fff;
+      font-family: Roboto;
+      font-size: 15px;
+      font-weight: 300;
+      margin-left: 12px;
+      padding: 0 11px 0 13px;
+      text-overflow: ellipsis;
+      width: 300px;
+      height: 20px;
+      margin-bottom: 10px;
+    }

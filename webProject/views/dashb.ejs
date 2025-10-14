@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel='stylesheet', href='/stylesheets/style.css'>
-        <title>Document</title>
+        <title>admin</title>
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
@@ -46,7 +46,7 @@
             <div class="admin_wrapper">
 
                 <!-- Top section -->
-                <div id="top_section">
+                <div id="top_section" class="top">
                     <b>ADMIN DASHBOARD</b><br>
                     <header><%- include ('partials/header.ejs') %></header>
                 </div>
@@ -62,7 +62,7 @@
                 </div>
 
                 <!-- Center section -->
-                <div id="center_section">
+                <div id="center_section" class="container">
                     <!-- Users details -->
                     <div>
                         <h1>Welcome, <%= user.name %> </h1>
@@ -328,66 +328,10 @@
             </div>
         </main>
 
+
+        <!-- Scripts Sections -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-        <script>
-            // Toggle section visibility
-            function toggleSection(sectionId) {
-                const sections = document.querySelectorAll('.section');
-                sections.forEach(section => {
-                    section.style.display = 'none';
-                });
-                document.getElementById('dv').style.display = 'none';
-                document.getElementById(sectionId).style.display = 'block';
-            }
-
-            // Render the pie chart with dynamic data
-            window.onload = function() {
-                // Use the data passed from the backend
-                const statusCounts = {
-                    pending: <%= statusCounts.pending || 0 %>,
-                    accepted: <%= statusCounts.accepted || 0 %>,
-                    cancelled: <%= statusCounts.cancelled || 0 %>
-                };
-
-                const data = {
-                    labels: ['Pending', 'Accepted', 'Cancelled'],
-                    datasets: [{
-                        data: [statusCounts.pending, statusCounts.accepted, statusCounts.cancelled],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)',
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                };
-
-                const config = {
-                    type: 'pie',
-                    data: data,
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'right',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Appointment Status Distribution'
-                            }
-                        }
-                    }
-                };
-
-                const ctx = document.getElementById('appointmentPieChart').getContext('2d');
-                new Chart(ctx, config);
-            };
-        </script>
+        <script src="/javascripts/main.js"></script>
+        <script src="javascripts/charts.js"></script>
     </body>
 </html>
