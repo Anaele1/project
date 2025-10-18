@@ -1,12 +1,11 @@
-// routes/patientsRouter.js
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
 const session = require('express-session');
-const { requireLogin } = require('../middleware/auth');
+const { requireLogin, auth  } = require('../middleware/auth');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const saltRounds = 10;
-
 //==================================================================================================
                             // POST METHOD
 // Sign-Up Route 
@@ -79,6 +78,61 @@ router.post('/login', async (req, res) => {
         }
     });
 });
+
+// Login Route using JWT
+// router.post('/login', async (req, res) => {
+//     const { email, password } = req.body;
+//     if (!email || !password) {
+//         return res.status(400).render('login', { error: 'Email and password are required.' });
+//     }
+
+//     const sql = 'SELECT * FROM patients WHERE email = ?';
+//     db.query(sql, [email], async (err, result) => {
+//         if (err) return res.status(500).render('login', { error: err.message });
+
+//         if (result.length > 0) {
+//             const user = result[0];
+//             const match = await bcrypt.compare(password, user.password);
+
+//             if (match) {
+//                 const payload = {
+//                     id: user.patient_id,
+//                     firstName: user.first_name,
+//                     lastName: user.last_name,
+//                     email: user.email,
+//                     language: user.language,
+//                     location: user.location
+//                 };
+
+//                 const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+//                 // Set token in HTTP-only cookie
+//                 res.cookie('token', token, {
+//                     httpOnly: true,
+//                     secure: false, // true if using HTTPS
+//                     maxAge: 3600000 // 1 hour
+//                 });
+
+//                 return res.redirect('/patients/patient_dashboard');
+//             } else {
+//                 return res.status(401).render('login', { error: 'Invalid email or password.' });
+//             }
+//         } else {
+//             return res.status(401).render('login', { error: 'Invalid email or password.' });
+//         }
+//     });
+// });
+
+// JWT dashboard route
+// router.get('/patient_dashboard', auth, (req, res) => {
+//     res.render('patientsDashboard', { user: req.user });
+// });
+
+//JWT logout route
+// router.get('/logout', (req, res) => {
+//     res.clearCookie('token');
+//     res.redirect('/account/login');
+// });
 
 // Patient Book appointment with provider
 router.post('/book', requireLogin, async (req, res) => {
