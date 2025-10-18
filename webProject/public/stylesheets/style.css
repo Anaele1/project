@@ -2,7 +2,7 @@ html{
   overflow-x: hidden;
 }
 
-/* body {
+body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: aquamarine;
   width: 100%;
@@ -10,7 +10,7 @@ html{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-} */
+}
 
 a {
   text-decoration: none;
@@ -21,7 +21,7 @@ p {
 }
 
 /* Mobile view */
-body {
+/* body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: rgb(200, 255, 127);
   width: 100%;
@@ -29,7 +29,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
+} */
 
 /* Hide by default */
 .section, #viewAppointments, #povidersList{
@@ -225,7 +225,7 @@ body {
 
 /* Tablet and larger mobile devices */
 @media (min-width: 600px) {
-  body {
+  /* body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
     background-color: rgb(127, 214, 255);
     width: 100%;
@@ -233,7 +233,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
+  } */
 
   div>.d_v{
     display: block;
@@ -451,7 +451,7 @@ body {
 
 /* Desktop and larger screens */
 @media (min-width: 992px) {
-  body {
+  /* body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
     background-color: rgb(255, 127, 206);
     width: 100%;
@@ -459,7 +459,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
+  } */
   
   /* Logout style */
   .m_v{
