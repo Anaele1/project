@@ -20,7 +20,7 @@
           <div class="cHeader">
             <a href="/patients/patient_dashboard">Dashboard</a>
             <button id="viewProviders">View Providers</button>
-            <button id="viewAppointmentBtn">View Appointments</button>
+            <button id="viewAppointmentBtn">Appointments History</button>
           </div>
 
         <!-- container section -->
@@ -72,6 +72,30 @@
             <%- include ('partials/footer.ejs') %>
         </footer>
     </main>
+
+    <h3>My Providers</h3>
+<table>
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Specialty</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% providers.forEach(provider => { %>
+            <tr>
+                <td><%= provider.first_name %></td>
+                <td><%= provider.last_name %></td>
+                <td><%= provider.specialty %></td>
+                <td><%= provider.email %></td>
+            </tr>
+        <% }); %>
+    </tbody>
+</table>
+<a href="/patients/patient_dashboard">Back to Dashboard</a>
+
 
     <!-- Appointments scripts -->
     <script>

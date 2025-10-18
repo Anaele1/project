@@ -1,4 +1,3 @@
-// routes/adminRouter.js
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
@@ -150,11 +149,11 @@ router.post('/verify', requireLogin, (req, res) => {
 //===================================================================================================
                             // GET METHOD
 // GET: Admin dashboard route
+// GET: Admin dashboard route
 router.get('/dashboard', requireLogin, (req, res) => {
     if (!req.session.user) {
         return res.redirect('/account/admin_a');
     }
-
     // Fetch appointment status counts
     const statusCountsSql = `
         SELECT
@@ -163,14 +162,12 @@ router.get('/dashboard', requireLogin, (req, res) => {
             COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled
         FROM appointment
     `;
-
     db.query(statusCountsSql, (err, statusCountsResult) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ error: err.message });
         }
         const statusCounts = statusCountsResult[0];
-
         // Fetch all patients
         const patientsQuery = 'SELECT * FROM patients';
         db.query(patientsQuery, (err, patients) => {
@@ -231,15 +228,55 @@ router.get('/dashboard', requireLogin, (req, res) => {
                                     console.log(err);
                                     return res.status(500).json({ error: err.message });
                                 }
-                                res.render('dashb', {
-                                    user: req.session.user,
-                                    patients,
-                                    patientsWithoutAppointment,
-                                    patientsWithAppointment,
-                                    providers,
-                                    providersWithoutAppointment,
-                                    providersWithAppointment,
-                                    statusCounts: statusCounts
+                                // NEW: Fetch number of patients per provider
+                                const patientsPerProviderQuery = `
+                                    SELECT
+                                        pr.provider_id,
+                                        CONCAT(pr.first_name, ' ', pr.last_name) AS provider_name,
+                                        COUNT(DISTINCT a.patient_id) AS patient_count
+                                    FROM
+                                        providers pr
+                                    LEFT JOIN
+                                        appointment a ON pr.provider_id = a.provider_id
+                                    GROUP BY
+                                        pr.provider_id, pr.first_name, pr.last_name;
+                                `;
+                                db.query(patientsPerProviderQuery, (err, patientsPerProvider) => {
+                                    if (err) {
+                                        console.log(err);
+                                        return res.status(500).json({ error: err.message });
+                                    }
+                                    // NEW: Fetch number of providers per patient
+                                    const providersPerPatientQuery = `
+                                        SELECT
+                                            p.patient_id,
+                                            CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
+                                            COUNT(DISTINCT a.provider_id) AS provider_count
+                                        FROM
+                                            patients p
+                                        LEFT JOIN
+                                            appointment a ON p.patient_id = a.patient_id
+                                        GROUP BY
+                                            p.patient_id, p.first_name, p.last_name;
+                                    `;
+                                    db.query(providersPerPatientQuery, (err, providersPerPatient) => {
+                                        if (err) {
+                                            console.log(err);
+                                            return res.status(500).json({ error: err.message });
+                                        }
+                                        res.render('dashb', {
+                                            user: req.session.user,
+                                            patients,
+                                            patientsWithoutAppointment,
+                                            patientsWithAppointment,
+                                            providers,
+                                            providersWithoutAppointment,
+                                            providersWithAppointment,
+                                            statusCounts: statusCounts,
+                                            patientsPerProvider,
+                                            providersPerPatient
+                                        });
+                                    });
                                 });
                             });
                         });
@@ -249,6 +286,106 @@ router.get('/dashboard', requireLogin, (req, res) => {
         });
     });
 });
+
+//Old router.get('/dashboard', requireLogin, (req, res) => {
+//     if (!req.session.user) {
+//         return res.redirect('/account/admin_a');
+//     }
+
+//     // Fetch appointment status counts
+//     const statusCountsSql = `
+//         SELECT
+//             COUNT(CASE WHEN status = 'pending' THEN 1 END) AS pending,
+//             COUNT(CASE WHEN status = 'accepted' THEN 1 END) AS accepted,
+//             COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled
+//         FROM appointment
+//     `;
+
+//     db.query(statusCountsSql, (err, statusCountsResult) => {
+//         if (err) {
+//             console.log(err);
+//             return res.status(500).json({ error: err.message });
+//         }
+//         const statusCounts = statusCountsResult[0];
+
+//         // Fetch all patients
+//         const patientsQuery = 'SELECT * FROM patients';
+//         db.query(patientsQuery, (err, patients) => {
+//             if (err) {
+//                 console.log(err);
+//                 return res.status(500).json({ error: err.message });
+//             }
+//             // Fetch all patients without appointment
+//             const patientsWithoutAppointmentQuery = `
+//                 SELECT p.*
+//                 FROM patients p
+//                 LEFT JOIN appointment a ON p.patient_id = a.patient_id
+//                 WHERE a.patient_id IS NULL
+//             `;
+//             db.query(patientsWithoutAppointmentQuery, (err, patientsWithoutAppointment) => {
+//                 if (err) {
+//                     console.log(err);
+//                     return res.status(500).json({ error: err.message });
+//                 }
+//                 // Fetch all patients with appointment
+//                 const patientsWithAppointmentQuery = `
+//                     SELECT DISTINCT p.*
+//                     FROM patients p
+//                     INNER JOIN appointment a ON p.patient_id = a.patient_id
+//                 `;
+//                 db.query(patientsWithAppointmentQuery, (err, patientsWithAppointment) => {
+//                     if (err) {
+//                         console.log(err);
+//                         return res.status(500).json({ error: err.message });
+//                     }
+//                     // Fetch all providers
+//                     const providersQuery = 'SELECT * FROM providers';
+//                     db.query(providersQuery, (err, providers) => {
+//                         if (err) {
+//                             console.log(err);
+//                             return res.status(500).json({ error: err.message });
+//                         }
+//                         // Fetch all providers without appointment
+//                         const providersWithoutAppointmentQuery = `
+//                             SELECT pr.*
+//                             FROM providers pr
+//                             LEFT JOIN appointment a ON pr.provider_id = a.provider_id
+//                             WHERE a.provider_id IS NULL
+//                         `;
+//                         db.query(providersWithoutAppointmentQuery, (err, providersWithoutAppointment) => {
+//                             if (err) {
+//                                 console.log(err);
+//                                 return res.status(500).json({ error: err.message });
+//                             }
+//                             // Fetch all providers with appointment
+//                             const providersWithAppointmentQuery = `
+//                                 SELECT DISTINCT pr.*
+//                                 FROM providers pr
+//                                 INNER JOIN appointment a ON pr.provider_id = a.provider_id
+//                             `;
+//                             db.query(providersWithAppointmentQuery, (err, providersWithAppointment) => {
+//                                 if (err) {
+//                                     console.log(err);
+//                                     return res.status(500).json({ error: err.message });
+//                                 }
+//                                 res.render('dashb', {
+//                                     user: req.session.user,
+//                                     patients,
+//                                     patientsWithoutAppointment,
+//                                     patientsWithAppointment,
+//                                     providers,
+//                                     providersWithoutAppointment,
+//                                     providersWithAppointment,
+//                                     statusCounts: statusCounts
+//                                 });
+//                             });
+//                         });
+//                     });
+//                 });
+//             });
+//         });
+//     });
+// });
 
 // GET: Fetch appointments with provider and patient names
 router.get('/appointments', requireLogin, (req, res) => {

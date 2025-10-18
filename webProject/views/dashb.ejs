@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel='stylesheet', href='/stylesheets/style.css'>
-        <title>admin</title>
+        <title>Document</title>
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
@@ -78,6 +78,8 @@
                         <button onclick="toggleSection('providersSection')">View All Providers</button>
                         <button onclick="toggleSection('providersWithoutAppointmentSection')">Providers Without Appointment</button>
                         <button onclick="toggleSection('providersWithAppointmentSection')">Providers With Appointment</button>
+                        <button>Number of Patients per Provider</button>
+                        <button>Number of Providers per Patient</button>
                     </div>
 
                     <!-- Center body -->
@@ -311,6 +313,44 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Number of Patients per Provider -->
+                        <table>
+                            <caption>Number of Patients per Provider</caption>
+                            <thead>
+                                <tr>
+                                    <th>Provider Name</th>
+                                    <th>Patients</th>
+                            <tr>
+                            </thead>
+                            <tbody>
+                                <% patientsPerProvider.forEach(provider => { %>
+                                    <tr>
+                                        <td><%= provider.provider_name %></td>
+                                        <td><%= provider.patient_count %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+<br><br>
+                        <!-- Number of Providers per Patient -->
+                        <table>
+                            <caption>Number of Providers per Patient</caption>
+                            <thead>
+                                <tr>
+                                    <th>Patient Name</th>
+                                    <th>Providers</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% providersPerPatient.forEach(patient => { %>
+                                    <tr>
+                                        <td><%= patient.patient_name %></td>
+                                        <td><%= patient.provider_count %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 

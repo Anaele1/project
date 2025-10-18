@@ -6,6 +6,7 @@ const { requireLogin, auth  } = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
+
 //==================================================================================================
                             // POST METHOD
 // Sign-Up Route 
@@ -254,8 +255,26 @@ router.post('/delete-account', requireLogin, (req, res) => {
                             // GET METHOD
 // Patient's dashboard
 router.get('/patient_dashboard', requireLogin, (req, res) => {
-
-    res.render('patientsDashboard', {user: req.session.user, messages: req.flash() });
+    const patientId = req.session.user.id;
+    // Query to get the number of providers the patient has appointments with
+    const providerCountSql = `
+        SELECT COUNT(DISTINCT a.provider_id) AS provider_count
+        FROM appointment a
+        WHERE a.patient_id = ?
+    `;
+    db.query(providerCountSql, [patientId], (err, providerCountResult) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to fetch provider count');
+            return res.redirect('/patients/patient_dashboard');
+        }
+        const providerCount = providerCountResult[0].provider_count;
+        res.render('patientsDashboard', {
+            user: req.session.user,
+            providerCount,
+            messages: req.flash()
+        });
+    });
 });
 
 //Patients profile
