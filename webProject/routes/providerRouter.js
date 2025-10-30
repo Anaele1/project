@@ -1,4 +1,3 @@
-// routes/providersRouters.js
 const express = require('express');
 const router = express.Router();
 const db = require('../database');
@@ -70,6 +69,7 @@ router.post('/login', async (req, res) => {
                         verify: user.verify,
                         language: user.language,
                         location: user.location,
+                        availability: user.availability,
                     };
                     req.flash('success', 'Successfuly Logged in');
                     res.redirect('/providers/provider_dashboard');
@@ -202,22 +202,62 @@ router.post('/delete-account', requireLogin, (req, res) => {
                              // GET METHOD
 // Dashboard routes  
 router.get('/provider_dashboard', requireLogin, (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/account/user');
-    }
-    // Fetch provider's specialty
-    const sql = 'SELECT specialty FROM providers WHERE provider_id = ?';
-    db.query(sql, [req.session.user.id], (err, result) => {
+    const providerId = req.session.user.id;
+    // Query to get the number of providers the patient has appointments with
+    const patientCountSql = `
+        SELECT COUNT(DISTINCT a.patient_id) AS patient_count
+        FROM appointment a
+        WHERE a.provider_id = ?
+    `;
+    db.query(patientCountSql, [providerId], (err, patientCountResult) => {
         if (err) {
             console.log(err);
+            req.flash('error', 'Failed to fetch provider count');
             return res.redirect('/providers/provider_dashboard');
         }
-        const specialty = result.length > 0 ? result[0].specialty : null;
-        res.render('providersDashboard', {
-            user: { ...req.session.user, specialty: specialty},
-            status: '',
-            appointments: '',
-            messages: req.flash()
+        const patientCount = patientCountResult[0].patient_count;
+
+        // Query to fetch appointment status counts, FILTERED BY patient_id
+        const statusCountsSql = `
+        SELECT
+            COUNT(CASE WHEN status = 'pending' THEN 1 END) AS pending,
+            COUNT(CASE WHEN status = 'accepted' THEN 1 END) AS accepted,
+            COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled
+        FROM appointment
+        WHERE provider_id = ?
+        `;
+
+        db.query(statusCountsSql, [providerId], (err, statusCountsResult) => {
+            if (err) {
+                console.error('Error fetching status counts:', err);
+                req.flash('error', 'Failed to fetch appointment status counts');
+                return res.redirect('/providers/provider_dashboard');
+            }
+
+            const statCounts = statusCountsResult[0];
+
+
+            const availabilitySql = 'UPDATE providers SET availability = "online" WHERE provider_id = ?';
+            db.query(availabilitySql, [providerId], (err, availability) => {
+                if (err) {
+                    console.log(err);
+                    req.flash('error', 'Failed to update availability.');
+                    return res.redirect('/providers');
+                }
+
+                const availabilityStatus = availability;
+
+                res.render('providersDashboard', {
+                    user: { ...req.session.user},
+                    patientCount,
+                    specialty: '',
+                    status: '',
+                    availabilityStatus: '',
+                    statCounts: statCounts,
+                    appointments: '',
+                    messages: req.flash()
+                });
+            });
         });
     });
 });
@@ -231,8 +271,8 @@ router.get('/appointments', requireLogin, (req, res) => {
     }
 
     const sql = `
-        SELECT p.first_name AS patient_first_name, p.last_name AS patient_last_name,
-               a.appointment_id AS appointment_id, a.appointment_date, a.appointment_time, a.status
+        SELECT p.first_name AS patient_first_name, p.last_name AS patient_last_name, p.availability AS patient_availability,
+        a.appointment_id AS appointment_id, a.appointment_date, a.appointment_time, a.status
         FROM appointment a
         JOIN patients p ON a.patient_id = p.patient_id
         WHERE a.provider_id = ? AND a.status = ?
@@ -244,7 +284,7 @@ router.get('/appointments', requireLogin, (req, res) => {
             req.flash('error', 'Failed to fetch appointments');
             return res.redirect('/providers/provider_dashboard');
         }
-        res.render('providersDashboard', {
+        res.render('pUsersAppointment', {
             appointments: appointments,
             user: req.session.user,
             messages: req.flash(),
@@ -253,13 +293,54 @@ router.get('/appointments', requireLogin, (req, res) => {
     });
 });
 
+//provider profile
+router.get('/providerProfile', requireLogin, (req, res) => {
+    console.log(req.user);
+    res.render('providersProfile', { user: req.user });
+});
+
+//List of Patients
+router.get('/myPatients', requireLogin, (req, res) => {
+    const appointmentSql = `
+        SELECT a.*, p.first_name as patient_first_name, p.last_name as patient_last_name, p.availability AS patient_availability, a.status
+        FROM appointment a
+        JOIN patients p ON a.patient_id = p.patient_id
+        WHERE a.provider_id = ?
+    `;
+    db.query(appointmentSql, [req.session.user.id], (err, appointments) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to fetch appointments');
+            return res.redirect('/patients/patient_dashboard');
+        }
+        res.render('pUsersAppointment', { 
+            specialty: '', 
+            patients: '', 
+            appointments,
+            type: 'appointmentss', 
+            status: '', 
+            user: req.session.user, 
+            messages: req.flash() 
+        });
+    });
+});
+
 //logout admin
 router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
+
+    const providerId = req.session.user.id;
+    db.query('UPDATE providers SET availability = "offline" WHERE provider_id = ?', [providerId], (err, result) => {
         if (err) {
-            return res.status(500).json({ error: 'Could not log out.' });
+            console.log(err);
+            req.flash('error', 'Failed to offline you.');
+            return res.redirect('/providers/provider_dashboard');
         }
-        res.redirect('/account/provider_a');
+        req.session.destroy(err => {
+            if (err) {
+                return res.status(500).json({ error: 'Could not log out.' });
+            }
+            res.redirect('/account/provider_a');
+        });
     });
 });
 
@@ -267,12 +348,5 @@ router.get('/logout', (req, res) => {
                              // UPDATE METHOD
 //=====================================================================================================
                              // DELETE METHOD
-
-//provider profile
-router.get('/providerProfile', requireLogin, (req, res) => {
-    console.log(req.user);
-    res.render('providersProfile', { user: req.user });
-});
-
-
+                           
 module.exports = router;

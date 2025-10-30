@@ -148,8 +148,8 @@ router.post('/verify', requireLogin, (req, res) => {
 
 //===================================================================================================
                             // GET METHOD
-// GET: Admin dashboard route
-// GET: Admin dashboard route
+
+// Admin dashboard route
 router.get('/dashboard', requireLogin, (req, res) => {
     if (!req.session.user) {
         return res.redirect('/account/admin_a');
@@ -286,106 +286,6 @@ router.get('/dashboard', requireLogin, (req, res) => {
         });
     });
 });
-
-//Old router.get('/dashboard', requireLogin, (req, res) => {
-//     if (!req.session.user) {
-//         return res.redirect('/account/admin_a');
-//     }
-
-//     // Fetch appointment status counts
-//     const statusCountsSql = `
-//         SELECT
-//             COUNT(CASE WHEN status = 'pending' THEN 1 END) AS pending,
-//             COUNT(CASE WHEN status = 'accepted' THEN 1 END) AS accepted,
-//             COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled
-//         FROM appointment
-//     `;
-
-//     db.query(statusCountsSql, (err, statusCountsResult) => {
-//         if (err) {
-//             console.log(err);
-//             return res.status(500).json({ error: err.message });
-//         }
-//         const statusCounts = statusCountsResult[0];
-
-//         // Fetch all patients
-//         const patientsQuery = 'SELECT * FROM patients';
-//         db.query(patientsQuery, (err, patients) => {
-//             if (err) {
-//                 console.log(err);
-//                 return res.status(500).json({ error: err.message });
-//             }
-//             // Fetch all patients without appointment
-//             const patientsWithoutAppointmentQuery = `
-//                 SELECT p.*
-//                 FROM patients p
-//                 LEFT JOIN appointment a ON p.patient_id = a.patient_id
-//                 WHERE a.patient_id IS NULL
-//             `;
-//             db.query(patientsWithoutAppointmentQuery, (err, patientsWithoutAppointment) => {
-//                 if (err) {
-//                     console.log(err);
-//                     return res.status(500).json({ error: err.message });
-//                 }
-//                 // Fetch all patients with appointment
-//                 const patientsWithAppointmentQuery = `
-//                     SELECT DISTINCT p.*
-//                     FROM patients p
-//                     INNER JOIN appointment a ON p.patient_id = a.patient_id
-//                 `;
-//                 db.query(patientsWithAppointmentQuery, (err, patientsWithAppointment) => {
-//                     if (err) {
-//                         console.log(err);
-//                         return res.status(500).json({ error: err.message });
-//                     }
-//                     // Fetch all providers
-//                     const providersQuery = 'SELECT * FROM providers';
-//                     db.query(providersQuery, (err, providers) => {
-//                         if (err) {
-//                             console.log(err);
-//                             return res.status(500).json({ error: err.message });
-//                         }
-//                         // Fetch all providers without appointment
-//                         const providersWithoutAppointmentQuery = `
-//                             SELECT pr.*
-//                             FROM providers pr
-//                             LEFT JOIN appointment a ON pr.provider_id = a.provider_id
-//                             WHERE a.provider_id IS NULL
-//                         `;
-//                         db.query(providersWithoutAppointmentQuery, (err, providersWithoutAppointment) => {
-//                             if (err) {
-//                                 console.log(err);
-//                                 return res.status(500).json({ error: err.message });
-//                             }
-//                             // Fetch all providers with appointment
-//                             const providersWithAppointmentQuery = `
-//                                 SELECT DISTINCT pr.*
-//                                 FROM providers pr
-//                                 INNER JOIN appointment a ON pr.provider_id = a.provider_id
-//                             `;
-//                             db.query(providersWithAppointmentQuery, (err, providersWithAppointment) => {
-//                                 if (err) {
-//                                     console.log(err);
-//                                     return res.status(500).json({ error: err.message });
-//                                 }
-//                                 res.render('dashb', {
-//                                     user: req.session.user,
-//                                     patients,
-//                                     patientsWithoutAppointment,
-//                                     patientsWithAppointment,
-//                                     providers,
-//                                     providersWithoutAppointment,
-//                                     providersWithAppointment,
-//                                     statusCounts: statusCounts
-//                                 });
-//                             });
-//                         });
-//                     });
-//                 });
-//             });
-//         });
-//     });
-// });
 
 // GET: Fetch appointments with provider and patient names
 router.get('/appointments', requireLogin, (req, res) => {

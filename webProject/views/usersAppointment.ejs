@@ -1,4 +1,3 @@
-<!-- views/appointments -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='/stylesheets/style.css'>
     <title>Manage Appointments</title>
+    
+    <style>
+      
+      .hide {
+        display: none;
+      }
+
+    </style>
+
   </head>
   <body>
     <main>
@@ -17,22 +25,32 @@
         </div>
 
         <!-- Users header -->
-          <div class="cHeader">
-            <a href="/patients/patient_dashboard">Dashboard</a>
-            <button id="viewProviders">View Providers</button>
-            <button id="viewAppointmentBtn">Appointments History</button>
-          </div>
+        <div class="cHeader">
+
+          <a href="/patients/patient_dashboard">Dashboard</a><br><br>
+          <a href="/patients/providers_list">View Providers</a>
+          <a href="/patients/appointment_history">Appointment History</a>
+          <a href="/patients/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Pending Appointments</a>
+          <a href="/patients/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">Accepted Appointments</a>
+          <a href="/patients/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a>
+          
+        </div>
 
         <!-- container section -->
         <div class="container">
+
           <!-- Providers list -->
-          <ul id="providersList">
-            <span class="editClose" id="viewProvidersClose">&times;</span>
+          <ul id="providersList" class="<%= type !== 'providerss' ? 'hide' : '' %>" >
             <h2>Available Providers</h2>
             <% if (typeof providers !== 'undefined' && providers.length) { %>
               <% providers.forEach(provider => { %>
                 <li>
-                  <%= provider.first_name %> <%= provider.last_name %>
+                  <% if (provider.availability === 'online') { %>
+                    <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
+                  <% } else { %>
+                    <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
+                  <% } %>
+                  <%= provider.first_name %> <%= provider.last_name %> <i><b><%= provider.specialty %></b></i> 
                   <form action="/patients/book" method="POST">
                     <input type="hidden" name="providerId" value="<%= provider.provider_id %>">
                     <input type="date" name="date" required>
@@ -46,79 +64,72 @@
             <% } %>
           </ul>
 
-          <!-- View Appointments -->
-          <ul id="viewAppointments">
-            <span class="editClose" id="viewAppointmentClose">&times;</span>
-            <h3>Your Appointments</h3>
-            <% if (typeof appointments !== 'undefined' && appointments.length) { %>
-              <% appointments.forEach(appointment => { %>
-                <li>
-                  <p>
-                    <strong>Provider:</strong> <%= appointment.provider_first_name %> <%= appointment.provider_last_name %><br>
-                    <strong>Date:</strong> <%= appointment.appointment_date %><br>
-                    <strong>Time:</strong> <%= appointment.appointment_time %><br>
-                    <strong>Status:</strong> <%= appointment.status %>
-                  </p>
-                </li>
-              <% }); %>
+          <!-- Appointment status filter -->
+          <div id="appointmentStatus" class="<%= type !== 'appointmentss' ? 'hide' : '' %>">
+            <h2><%= status.charAt(0).toUpperCase() + status.slice(1) %> Appointments</h2>
+            <% if (appointments.length > 0) { %>
+                <table>
+                    <thead>
+                        <tr>
+                          <th>Availability</th>
+                          <th>Patient Name</th>
+                          <th>Appointment Date</th>
+                          <th>Appointment Time</th>
+                          <th>Status</th>
+                          <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% appointments.forEach(appointment => { %>
+                            <tr>
+                                <td><% if (appointment.provider_availability === 'online') { %>
+                                  <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
+                                  <% } else { %>
+                                  <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
+                                  <% } %>
+                                </td>
+                                <!-- <td><%= appointment.provider_availability %></td> -->
+                                <td><%= appointment.provider_first_name %> <%= appointment.provider_last_name %></td>
+                                <td><%= appointment.appointment_date %></td>
+                                <td><%= appointment.appointment_time %></td>
+                                <td><%= appointment.status %></td>
+                                <td class="action-links">
+                                    <% if (appointment.status === 'pending') { %>
+                                        <form action="/patients/respond" method="POST">
+                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                                          <button type="submit" name="action" value="accept">Accept</button>
+                                          <button type="submit" name="action" value="cancel">Cancel</button>
+                                        </form>
+                                    <% } else if (appointment.status === 'accepted') { %>
+                                        <form action="/patients/respond" method="POST">
+                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                                          <button><a href="/chat/<%= appointment.appointment_id %>">Chat</a></button>
+                                          <button type="submit" name="action" value="cancel">Cancel</button>
+                                        </form>
+                                    <% } else if (appointment.status === 'cancelled') { %>
+                                        <form action="/patients/respond" method="POST">
+                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                                          <button type="submit" name="action" value="accept">Re-Accept</button>
+                                        </form>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
             <% } else { %>
-              <li>No appointments found.</li>
+                <p>No <%= status %> appointments found.</p>
             <% } %>
-          </ul>
+          </div>
+
         </div>
-        
+
         <!-- Footer Section -->
         <footer>
-            <%- include ('partials/footer.ejs') %>
+        <%- include ('partials/footer.ejs') %>
         </footer>
     </main>
 
-    <h3>My Providers</h3>
-<table>
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Specialty</th>
-            <th>Email</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% providers.forEach(provider => { %>
-            <tr>
-                <td><%= provider.first_name %></td>
-                <td><%= provider.last_name %></td>
-                <td><%= provider.specialty %></td>
-                <td><%= provider.email %></td>
-            </tr>
-        <% }); %>
-    </tbody>
-</table>
-<a href="/patients/patient_dashboard">Back to Dashboard</a>
-
-
-    <!-- Appointments scripts -->
-    <script>
-      document.getElementById("viewAppointmentBtn").addEventListener("click", function() {
-        document.getElementById("viewAppointments").style.display = "block";
-        document.getElementById("dv").style.display = "none";
-      });
-
-      document.getElementById("viewAppointmentClose").addEventListener("click", function() {
-        document.getElementById("viewAppointments").style.display = "none";
-        document.getElementById("dv").style.display = "grid";
-      });
-
-      document.getElementById("viewProviders").addEventListener("click", function() {
-        document.getElementById("providersList").style.display = "block";
-        document.getElementById("dv").style.display = "none";
-      });
-
-      document.getElementById("viewProvidersClose").addEventListener("click", function() {
-        document.getElementById("providersList").style.display = "none";
-        document.getElementById("dv").style.display = "grid";
-      });
-    </script>
   </body>
 </html>
 

@@ -52,6 +52,8 @@ router.post('/login', async (req, res) => {
             const user = result[0];
             // Compare provided password with hashed password
             const match = await bcrypt.compare(password, user.password);
+            
+            //Session Security
             if (match) {
                 // Regenerate the session before storing user data
                 req.session.regenerate(err => {
@@ -67,73 +69,47 @@ router.post('/login', async (req, res) => {
                         email: user.email,
                         language: user.language,
                         location: user.location,
+                        availability:user.availability,
                     };
                     req.flash('success', 'Successfuly Logged in');
                     res.redirect('/patients/patient_dashboard');
                 });
+
             } else {
                 res.status(401).json({ error: 'Invalid email or password.' });
             }
+
+            // //JWT Security
+            // if (match) {
+            //     const payload = {
+            //         patient_id: user.patient_id,
+            //         firstName: user.first_name,
+            //         lastName: user.last_name,
+            //         email: user.email,
+            //         language: user.language,
+            //         location: user.location,
+            //         availability: user.availability,
+            //     };
+
+            //    const token = jwt.sign(payload, process.env.JWT_SECRET,{ expiresIn: '1h' });
+
+            //     // Set token in HTTP-only cookie
+            //     res.cookie('token', token, {
+            //         httpOnly: true,
+            //         secure: false, // true if using HTTPS
+            //         maxAge: 3600000 // 1 hour
+            //     });
+
+            //     return res.redirect('/patients/patient_dashboard');
+            // } else {
+            //     return res.status(401).render('login', { error: 'Invalid email or password.' });
+            // }
+            
         } else {
             res.status(401).json({ error: 'Invalid email or password.' });
         }
     });
 });
-
-// Login Route using JWT
-// router.post('/login', async (req, res) => {
-//     const { email, password } = req.body;
-//     if (!email || !password) {
-//         return res.status(400).render('login', { error: 'Email and password are required.' });
-//     }
-
-//     const sql = 'SELECT * FROM patients WHERE email = ?';
-//     db.query(sql, [email], async (err, result) => {
-//         if (err) return res.status(500).render('login', { error: err.message });
-
-//         if (result.length > 0) {
-//             const user = result[0];
-//             const match = await bcrypt.compare(password, user.password);
-
-//             if (match) {
-//                 const payload = {
-//                     id: user.patient_id,
-//                     firstName: user.first_name,
-//                     lastName: user.last_name,
-//                     email: user.email,
-//                     language: user.language,
-//                     location: user.location
-//                 };
-
-//                 const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-//                 // Set token in HTTP-only cookie
-//                 res.cookie('token', token, {
-//                     httpOnly: true,
-//                     secure: false, // true if using HTTPS
-//                     maxAge: 3600000 // 1 hour
-//                 });
-
-//                 return res.redirect('/patients/patient_dashboard');
-//             } else {
-//                 return res.status(401).render('login', { error: 'Invalid email or password.' });
-//             }
-//         } else {
-//             return res.status(401).render('login', { error: 'Invalid email or password.' });
-//         }
-//     });
-// });
-
-// JWT dashboard route
-// router.get('/patient_dashboard', auth, (req, res) => {
-//     res.render('patientsDashboard', { user: req.user });
-// });
-
-//JWT logout route
-// router.get('/logout', (req, res) => {
-//     res.clearCookie('token');
-//     res.redirect('/account/login');
-// });
 
 // Patient Book appointment with provider
 router.post('/book', requireLogin, async (req, res) => {
@@ -173,6 +149,26 @@ router.post('/book', requireLogin, async (req, res) => {
             req.flash('success', 'Appointment request sent!');
             res.redirect('/patients/patient_dashboard');
         });
+    });
+});
+
+// Responding to appointment
+router.post('/respond', requireLogin, (req, res) => {
+    const { appointmentId, action } = req.body;
+    console.log("Appointment ID:", appointmentId);
+    console.log("Action:", action)
+    const status = action === 'accept' ? 'accepted' : 'cancelled';
+    console.log("New status:", status);
+    const sql = 'UPDATE appointment SET status = ? WHERE appointment_id = ?';
+    db.query(sql, [status, appointmentId], (err, result) => {
+        console.log("SQL Result:", result);
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to update appointment');
+            return res.redirect('/patients/patient_dashboard');
+        }
+        req.flash('success', `Appointment ${status}`);
+        res.redirect('/patients/patient_dashboard');
     });
 });
 
@@ -255,24 +251,77 @@ router.post('/delete-account', requireLogin, (req, res) => {
                             // GET METHOD
 // Patient's dashboard
 router.get('/patient_dashboard', requireLogin, (req, res) => {
+
+    //Session User id call
     const patientId = req.session.user.id;
+
+    //JWT user id call
+    //const patientId = req.user.patientId;
+
     // Query to get the number of providers the patient has appointments with
     const providerCountSql = `
         SELECT COUNT(DISTINCT a.provider_id) AS provider_count
         FROM appointment a
         WHERE a.patient_id = ?
     `;
+
     db.query(providerCountSql, [patientId], (err, providerCountResult) => {
         if (err) {
-            console.log(err);
+            console.error('Error fetching provider count:', err);
             req.flash('error', 'Failed to fetch provider count');
             return res.redirect('/patients/patient_dashboard');
         }
         const providerCount = providerCountResult[0].provider_count;
-        res.render('patientsDashboard', {
-            user: req.session.user,
-            providerCount,
-            messages: req.flash()
+
+        // Query to fetch appointment status counts, FILTERED BY patient_id
+        const statusCountsSql = `
+            SELECT
+                COUNT(CASE WHEN status = 'pending' THEN 1 END) AS pending,
+                COUNT(CASE WHEN status = 'accepted' THEN 1 END) AS accepted,
+                COUNT(CASE WHEN status = 'cancelled' THEN 1 END) AS cancelled
+            FROM appointment
+            WHERE patient_id = ?
+        `;
+
+        db.query(statusCountsSql, [patientId], (err, statusCountsResult) => {
+            if (err) {
+                console.error('Error fetching status counts:', err);
+                req.flash('error', 'Failed to fetch appointment status counts');
+                return res.redirect('/patients/patient_dashboard');
+            }
+            const statCounts = statusCountsResult[0];
+
+            const availabilitySql = 'UPDATE patients SET availability = "online" WHERE patient_id = ?';
+            db.query(availabilitySql, [patientId], (err, availability) => {
+                if (err) {
+                    console.log(err);
+                    req.flash('error', 'Failed to update availability.');
+                    return res.redirect('/providers');
+                }
+                const availabilityStatus = availability;
+
+                //Session Render
+                res.render('patientsDashboard', {
+                    user: req.user,
+                    user: req.session.user,
+                    providerCount,
+                    availabilityStatus,
+                    statCounts: statCounts,
+                    status: 'status',
+                    messages: req.flash()
+                });
+
+                //JWT Render
+                // res.render('patientsDashboard', { 
+                //     user: req.user,
+                //     providerCount,
+                //     availabilityStatus,
+                //     availability,
+                //     statCounts: statCounts,
+                //     status: 'status',
+                //     messages: req.flash() 
+                // });
+            });
         });
     });
 });
@@ -283,39 +332,107 @@ router.get('/patientProfile', requireLogin, (req, res) => {
     res.render('patientsProfile', { user: req.user });
 });
 
-//Patients appointments
-router.get('/userAppointment', requireLogin, (req, res) => {
-    const providerSql = 'SELECT * FROM providers WHERE verify = "verified"';
-    const appointmentSql = `
-        SELECT a.*, p.first_name as provider_first_name, p.last_name as provider_last_name, a.status
+// Appointments (status) router
+router.get('/appointments', requireLogin, (req, res) => {
+    const status = req.query.status || 'pending';
+    if (!['pending', 'accepted', 'cancelled',].includes(status)) {
+        req.flash('error', 'Invalid status');
+        return res.redirect('/patients/patient_dashboard');
+    }
+    const sql = `
+        SELECT p.first_name AS provider_first_name, p.last_name AS provider_last_name, p.availability AS provider_availability,
+        a.appointment_id AS appointment_id, a.appointment_date, a.appointment_time, a.status
         FROM appointment a
         JOIN providers p ON a.provider_id = p.provider_id
-        WHERE a.patient_id = ?
+        WHERE a.patient_id = ? AND a.status = ?
     `;
+    db.query(sql, [req.session.user.id, status], (err, appointments) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to fetch appointments');
+            return res.redirect('/patients/patient_dashboard');
+        }
+        res.render('usersAppointment', {
+            status: status,
+            provider: '',
+            appointments: appointments,
+            user: req.session.user,
+            type: 'appointmentss',
+            messages: req.flash(),
+        });
+        
+    });
+});
+
+//Providers list router
+router.get('/providers_list', requireLogin, (req, res) => {
+    const providerSql = 'SELECT * FROM providers WHERE verify = "verified"';
     db.query(providerSql, (err, providers) => {
         if (err) {
             console.log(err);
             req.flash('error', 'Failed to fetch providers');
             return res.redirect('/patients/patient_dashboard');
         }
-        db.query(appointmentSql, [req.session.user.id], (err, appointments) => {
-            if (err) {
-                console.log(err);
-                req.flash('error', 'Failed to fetch appointments');
-                return res.redirect('/patients/patient_dashboard');
-            }
-            res.render('usersAppointment', { specialty: '', providers, appointments, user: req.session.user, messages: req.flash() });
+        res.render('usersAppointment', { 
+            specialty: '', 
+            providers, 
+            appointments: '', 
+            type: 'providerss', 
+            status: '', 
+            user: req.session.user, 
+            messages: req.flash() 
+        });
+    });
+});
+
+// Appointments History
+router.get('/appointment_history', requireLogin, (req, res) => {
+    const appointmentSql = `
+        SELECT a.*, p.first_name as provider_first_name, p.last_name as provider_last_name, p.availability AS provider_availability, a.status
+        FROM appointment a
+        JOIN providers p ON a.provider_id = p.provider_id
+        WHERE a.patient_id = ?
+    `;
+    db.query(appointmentSql, [req.session.user.id], (err, appointments) => {
+        if (err) {
+            console.log(err);
+            req.flash('error', 'Failed to fetch appointments');
+            return res.redirect('/patients/patient_dashboard');
+        }
+        res.render('usersAppointment', { 
+            specialty: '', 
+            providers: '', 
+            appointments,
+            type: 'appointmentss', 
+            status: '', 
+            user: req.session.user, 
+            messages: req.flash() 
         });
     });
 });
 
 //logout patient
 router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
+
+    const patientId = req.session.user.id;
+    db.query('UPDATE patients SET availability = "offline" WHERE patient_id = ?', [patientId], (err, result) => {
         if (err) {
-            return res.status(500).json({ error: 'Could not log out.' });
+            console.log(err);
+            req.flash('error', 'Failed to offline you.');
+            return res.redirect('/providers/provider_dashboard');
         }
-        res.redirect('/account/users_patient_a');
+
+        //Session Logout
+        req.session.destroy(err => {
+            if (err) {
+                return res.status(500).json({ error: 'Could not log out.' });
+            }
+            res.redirect('/account/users_patient_a');
+        });
+
+        //JWT Logout
+        // res.clearCookie('token');
+        // res.redirect('/account/users_patient_a');
     });
 });
 

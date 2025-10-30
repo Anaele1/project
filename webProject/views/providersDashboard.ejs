@@ -1,4 +1,3 @@
-<!-- views/providersDashboard -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +13,13 @@
 
         <!--users top section -->
         <div id="users_top">
-          <b>WELCOME TO PROVIDER DASHBOARD</b>
           <header><%- include ('partials/header.ejs') %></header>
+          <b>WELCOME TO PROVIDER DASHBOARD</b>
         </div>
 
         <!-- users left section -->
         <div id="users_left">
+          <a href="/providers/appointments">Appointments</a><br><br>
           <a href="/providers/providerProfile">Profile</a><br><br>
           <a href="/">Report</a><br><br><br>
           <!-- Logout Link -->
@@ -32,90 +32,42 @@
 
           <!-- Users details -->
           <div>
+            <!-- <b>Availability: <%= user.availability %></b> -->
+            <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span> 
             <h1>Welcome, <%= user.firstName %></h1>
             <b>Specialty: <%= user.specialty %></b>
           </div><br>
-
-          <!-- Usera container header -->
-          <div class="cHeader">
-            <a href="/providers/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Pending Appointments</a>
-            <a href="/providers/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">Accepted Appointments</a>
-            <a href="/providers/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a>
-          </div>
+         
 
           <!-- Dashboard Views -->
           <div class="dViews" id="dv">
-              <a class="dViewsList">
-                  <h3>Pending Appointments</h3>
-                  <p>2222222</p>
-              </a>
-              <a class="dViewsList">
-                  <h3>Patients Accepted</h3>
-                  <p>1111111</p>
-              </a>
-              <a class="dViewsList">
-                  <h3>Patients Cancelled</h3>
-                  <p>555555555</p>
-              </a>
-              <a class="dViewsList">
-                <h3>Patients online</h3>
-                <p>999999999</p>
-              </a>
-              <a class="dViewsList" href="">
+            
+              <div class="dViewsList">
+                <h3>Pending Appointments</h3>
+                <p><%= statCounts.pending %></p>
+                <a href="/providers/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">View Pending</a>
+              </div>
+
+              <div class="dViewsList">
+                <h3>Accepted Appointments</h3>
+                <p><%= statCounts.accepted %></p>
+                <a href="/providers/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">View Accepted</a>
+              </div>
+
+              <div class="dViewsList">
+                <h3>Cancelled Appointments</h3>
+                <p><%= statCounts.cancelled %></p>
+                <a href="/providers/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a>
+              </div>
+
+              <div class="dViewsList">
                 <h3>Your Patients</h3>
-                <p>999999999</p>
-              </a>
+                <p><%= patientCount %></p>
+                <a href="/providers/myProviders">view Your Patients</a>
+              </div>
           </div>
 
-          <!-- Appointment status filter -->
-          <div id="appointmentStatus">
-              <h2><%= status.charAt(0).toUpperCase() + status.slice(1) %> Appointments</h2>
-              <% if (appointments.length > 0) { %>
-                  <table>
-                      <thead>
-                          <tr>
-                              <th>Patient Name</th>
-                              <th>Appointment Date</th>
-                              <th>Appointment Time</th>
-                              <th>Status</th>
-                              <th>Actions</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <% appointments.forEach(appointment => { %>
-                              <tr>
-                                  <td><%= appointment.patient_first_name %> <%= appointment.patient_last_name %></td>
-                                  <td><%= appointment.appointment_date %></td>
-                                  <td><%= appointment.appointment_time %></td>
-                                  <td><%= appointment.status %></td>
-                                  <td class="action-links">
-                                      <% if (appointment.status === 'pending') { %>
-                                          <form action="/providers/respond" method="POST">
-                                            <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                            <button type="submit" name="action" value="accept">Accept</button>
-                                            <button type="submit" name="action" value="cancel">Cancel</button>
-                                          </form>
-                                      <% } else if (appointment.status === 'accepted') { %>
-                                          <form action="/providers/respond" method="POST">
-                                            <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                            <button><a href="/chat/<%= appointment.appointment_id %>">Chat</a></button>
-                                            <button type="submit" name="action" value="cancel">Cancel</button>
-                                          </form>
-                                      <% } else if (appointment.status === 'cancelled') { %>
-                                          <form action="/providers/respond" method="POST">
-                                            <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                            <button type="submit" name="action" value="accept">Re-Accept</button>
-                                          </form>
-                                      <% } %>
-                                  </td>
-                              </tr>
-                          <% }); %>
-                      </tbody>
-                  </table>
-              <% } else { %>
-                  <p>No <%= status %> appointments found.</p>
-              <% } %>
-          </div>
+        
         </div>
 
         <!-- users footer -->

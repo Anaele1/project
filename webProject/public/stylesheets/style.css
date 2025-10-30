@@ -20,24 +20,11 @@ p {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-/* Mobile view */
-/* body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: rgb(200, 255, 127);
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-} */
 
 /* Hide by default */
 .section, #viewAppointments, #povidersList{
   display: none;
   }
-
-  /* Logout style */
-  
 
   .d_v{
     display: none;
@@ -57,19 +44,10 @@ p {
   
   /* /////////////////////////////////////////////////////////////////////////////////////////// */
   /* Top section styling */
-  #top_section{
   
-  }
-  
-  #users_top{
-  
-  }
   
   /* /////////////////////////////////////////////////////////////////////////////////////////// */
   /* Left side section styling */
-  #left_section{
-  
-  }
   
   #users_left{
     display: flex;
@@ -84,19 +62,11 @@ p {
   
   /* /////////////////////////////////////////////////////////////////////////////////////////// */
   /* Center section styling */
-  #center_section {
   
-  }
-  
-  #users_container{
-  
-  }
   
   /* /////////////////////////////////////////////////////////////////////////////////////////// */
   /* Right side section styling */
-  #right_section{
-
-  }
+  
   
   /* /////////////////////////////////////////////////////////////////////////////////////////// */
   /* Footer section styling */
@@ -171,6 +141,11 @@ p {
   color: red;
   }
 
+  .container{
+    width: 80%;
+    padding: 1.2rem;
+  }
+
   .dViewsList{
     background-color:#e8f4f8;
     width: 90%;
@@ -183,17 +158,20 @@ p {
     border-radius: 1rem;
   }
   
-  .cHeader>button, .cHeader>a{
+  .cHeader>a{
   border: none;
-  font-size: 10px;
-  background: white;
-  color: black;
+  font-size: 20px;
+  background-color: #e8f4f8;
   }
   
   .dViewsList>p{
   text-align: center;
   color: #fa2b2b;
   font-weight: 800;
+  }
+
+  .dViewsList>a{
+    margin-left: 1rem;
   }
   
   /* Map and Location search style */
@@ -408,11 +386,9 @@ p {
   border-radius: 1rem;
   }
   
-  .cHeader>button, .cHeader>a{
+ .cHeader>a{
   border: none;
-  font-size: 10px;
-  background: white;
-  color: black;
+  font-size: 20px;
   }
   
   .dViewsList>p{
@@ -631,11 +607,10 @@ p {
   border-radius: 1rem;
   }
 
-  .cHeader>button, .cHeader>a{
+  .cHeader>a{
   border: none;
-  font-size: 10px;
-  background: white;
-  color: black;
+  font-size: 20px;
+  background-color: #e8f4f8;
   }
 
   .dViewsList>p{

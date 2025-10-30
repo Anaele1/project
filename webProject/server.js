@@ -1,4 +1,3 @@
-// server.js
 //CONST, VARIABLE NAMING AND IMPORTATION 
 const express = require('express');
 const http = require('http');

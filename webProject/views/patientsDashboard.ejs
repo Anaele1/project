@@ -1,4 +1,3 @@
-<!-- views/patientDashboard -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,13 +13,16 @@
 
         <!--users top section -->
         <div id="users_top" class="top">
-          <b>PATIENT DASHBOARD</b>
+          
           <header><%- include ('partials/header.ejs') %></header>
+          <b>PATIENT DASHBOARD</b>
         </div>
-
+        
         <!-- users left section -->
         <div id="users_left">
-            <a href="/patients/userAppointment">Appointments</a><br><br>
+            <a href="/patients/appointments">Manage Appointments</a><br><br>
+            <a href="/patients/providers_list">View Providers</a><br><br>
+            <a href="/patients/appointment_history">Appointment History</a><br><br>
             <a href="/#">Report</a><br><br><br>
             <a href="/patients/patientProfile">Profile</a><br><br>
             <!-- Logout Link -->
@@ -35,6 +37,8 @@
 
           <!-- Users detailsS -->
           <div>
+            <!-- <b>Availability: <%= user.availability %></b> -->
+            <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
             <h1>Welcome <%= user.firstName %> </h1>
           </div>
           
@@ -53,30 +57,27 @@
           <!-- Dashboard Views -->
           <div class="dViews" id="dv">
               <div class="dViewsList">
-                  <h3>MPending Appointments</h3>
-                  <p>2222222</p>
+                  <h3>Pending Appointments</h3>
+                  
+                  <p><%= statCounts.pending %></p>
+                  <a href="/patients/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">View Pending</a> 
               </div>
               <div class="dViewsList">
                   <h3>Cancelled Appointments</h3>
-                  <p>1111111</p>
+                  <p><%= statCounts.cancelled %></p>
+                  <a href="/patients/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">View Cancelled</a>
               </div>
               <div class="dViewsList">
                   <h3>Accepted Appointments</h3>
-                  <p>555555555</p>
+                  <p><%= statCounts.accepted %></p>
+                  <a href="/patients/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">View Accepted</a>
               </div>
               <div class="dViewsList">
                   <h3>Your Providers</h3>
                   <p><%= providerCount %></p>
-                  <a href="/patients/my-providers">view Your Providers</a>
+                  <a href="/patients/appointment_history">view Your Providers</a>
               </div>
-              <div class="dViewsList">
-                  <h3>Providers Online </h3>
-                  <p>55578908</p>
-              </div>
-              <div class="dViewsList">
-                  <h3>Recommendations</h3>
-                  <p>2222222p</p>
-              </div>
+              
           </div>
 
           <!-- Live Chat Section -->
@@ -245,6 +246,7 @@
     </script> -->
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    
 
 
   </body>
