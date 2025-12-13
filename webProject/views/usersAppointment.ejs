@@ -12,125 +12,138 @@
         display: none;
       }
 
+      #listing{
+          display: grid;
+          grid-template-columns: 2fr 2fr 2fr;
+          gap: 1rem;
+      }
+
     </style>
 
   </head>
+  
   <body>
-    <main>
-        <!-- top section -->
-        <div class="top">
-            <header>
-            <%- include ('partials/header.ejs') %>
-            </header>
-        </div>
+    <div class="users_wrapper">
+      <!-- Header Section -->
+      <header id="users_top">
+        <%- include ('partials/header.ejs') %>
+      </header>
 
-        <!-- Users header -->
-        <div class="cHeader">
-
-          <a href="/patients/patient_dashboard">Dashboard</a><br><br>
-          <a href="/patients/providers_list">View Providers</a>
-          <a href="/patients/appointment_history">Appointment History</a>
-          <a href="/patients/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Pending Appointments</a>
-          <a href="/patients/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">Accepted Appointments</a>
-          <a href="/patients/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a>
-          
-        </div>
-
-        <!-- container section -->
-        <div class="container">
-
-          <!-- Providers list -->
-          <ul id="providersList" class="<%= type !== 'providerss' ? 'hide' : '' %>" >
-            <h2>Available Providers</h2>
-            <% if (typeof providers !== 'undefined' && providers.length) { %>
-              <% providers.forEach(provider => { %>
-                <li>
-                  <% if (provider.availability === 'online') { %>
-                    <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
-                  <% } else { %>
-                    <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
-                  <% } %>
-                  <%= provider.first_name %> <%= provider.last_name %> <i><b><%= provider.specialty %></b></i> 
-                  <form action="/patients/book" method="POST">
-                    <input type="hidden" name="providerId" value="<%= provider.provider_id %>">
-                    <input type="date" name="date" required>
-                    <input type="time" name="time" required>
-                    <button type="submit">Book Appointment</button>
-                  </form>
-                </li>
-              <% }); %>
-              <% } else { %>
-              <li>No providers available.</li>
-            <% } %>
+      <!-- Navigation Section -->
+      <nav id="users_left">
+          <ul style="line-height: 1.3rem;">
+            <a href="/patients/patient_dashboard">Dashboard</a><br><br>
+            <a href="/patients/providers_list">View Providers</a>
+            <a href="/patients/appointment_history">Appointment History</a>
+            <a href="/patients/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Pending Appointments</a>
+            <a href="/patients/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">Accepted Appointments</a>
+            <a href="/patients/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a>
           </ul>
+      </nav>
 
+      <!-- Main Section -->
+      <main id="users_container">
+        <!-- Appointments Sections -->
+        <section >
           <!-- Appointment status filter -->
           <div id="appointmentStatus" class="<%= type !== 'appointmentss' ? 'hide' : '' %>">
             <h2><%= status.charAt(0).toUpperCase() + status.slice(1) %> Appointments</h2>
             <% if (appointments.length > 0) { %>
-                <table>
-                    <thead>
-                        <tr>
-                          <th>Availability</th>
-                          <th>Patient Name</th>
-                          <th>Appointment Date</th>
-                          <th>Appointment Time</th>
-                          <th>Status</th>
-                          <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% appointments.forEach(appointment => { %>
-                            <tr>
-                                <td><% if (appointment.provider_availability === 'online') { %>
-                                  <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
-                                  <% } else { %>
-                                  <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
-                                  <% } %>
-                                </td>
-                                <!-- <td><%= appointment.provider_availability %></td> -->
-                                <td><%= appointment.provider_first_name %> <%= appointment.provider_last_name %></td>
-                                <td><%= appointment.appointment_date %></td>
-                                <td><%= appointment.appointment_time %></td>
-                                <td><%= appointment.status %></td>
-                                <td class="action-links">
-                                    <% if (appointment.status === 'pending') { %>
-                                        <form action="/patients/respond" method="POST">
-                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                          <button type="submit" name="action" value="accept">Accept</button>
-                                          <button type="submit" name="action" value="cancel">Cancel</button>
-                                        </form>
-                                    <% } else if (appointment.status === 'accepted') { %>
-                                        <form action="/patients/respond" method="POST">
-                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                          <button><a href="/chat/<%= appointment.appointment_id %>">Chat</a></button>
-                                          <button type="submit" name="action" value="cancel">Cancel</button>
-                                        </form>
-                                    <% } else if (appointment.status === 'cancelled') { %>
-                                        <form action="/patients/respond" method="POST">
-                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                          <button type="submit" name="action" value="accept">Re-Accept</button>
-                                        </form>
-                                    <% } %>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
+              <div id="listing">
+                <% appointments.forEach(appointment => { %>
+                  <ul style="background-color: #e8f4f8">
+                    <img src="" alt="User image">
+                    <li><%= appointment.provider_first_name %> <%= appointment.provider_last_name %></li>
+                    <li><%= appointment.appointment_date %></li>
+                    <li><%= appointment.appointment_time %></li>
+                    <li><%= appointment.status %></li>
+                    <li class="action-links">
+                        <% if (appointment.status === 'pending') { %>
+                            <form action="/patients/respond" method="POST">
+                              <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                              <button type="submit" name="action" value="accept">Accept</button>
+                              <button style="color: red;" type="submit" name="action" value="cancel">Cancel</button>
+                            </form>
+                        <% } else if (appointment.status === 'accepted') { %>
+                            <form action="/patients/respond" method="POST">
+                              <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                              <button style="color: red;" type="submit" name="action" value="cancel">Cancel</button>
+                              <span><a href="/patients/chat">Chat</a></span>
+                            </form>
+                        <% } else if (appointment.status === 'cancelled') { %>
+                            <form action="/patients/respond" method="POST">
+                              <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                              <button type="submit" name="action" value="accept">Re-Accept</button>
+                            </form>
+                        <% } %>
+                    </li>
+                    <li><% if (appointment.provider_availability === 'online') { %>
+                      <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
+                      <% } else { %>
+                      <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
+                      <% } %>
+                    </li>
+                    <!-- <td><%= appointment.provider_availability %></td> -->
+                  </ul>
+                  <% });
+                %>
+              </div>
+                    
             <% } else { %>
                 <p>No <%= status %> appointments found.</p>
             <% } %>
           </div>
+            
+        </section>
 
-        </div>
+        <!-- Providers Section -->
+        <section>
+          <!-- Providers list -->
+          <div id="providersList" class="<%= type !== 'providerss' ? 'hide' : '' %>" >
+            <h2>Available Providers</h2>
+            <% if (typeof providers !== 'undefined' && providers.length) { %>
+              <div id="listing">
+                <% providers.forEach(provider => { %>
+                  <ul style="background-color: #e8f4f8;">
+                    <img src="" alt="User image">
+                    <li> <%= provider.first_name %> <%= provider.last_name %> </li>
+                    <li> <%= provider.specialty %> </li>
+                    <li> 
+                      <form action="/patients/book" method="POST">
+                        <input type="hidden" name="providerId" value="<%= provider.provider_id %>">
+                        <input type="date" name="date" required>
+                        <input type="time" name="time" required><br>
+                        <button style="background-color: rgb(14, 126, 14); border: none; color: #fa5e5e;" type="submit">Book Appointment</button>
+                      </form>
+                    </li>
+                    <li> 
+                      <% if (provider.availability === 'online') { %>
+                        <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
+                      <% } else { %>
+                        <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
+                      <% } %>
+                    </li>
+                  </ul>
+                  <% });
+                %>
+              </div>
 
-        <!-- Footer Section -->
-        <footer>
+            <% } else { %>
+            <li>No providers available.</li>
+            <% } %>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Footer Section -->
+      <footer id="users_footer">
         <%- include ('partials/footer.ejs') %>
-        </footer>
-    </main>
+      </footer>
+    </div>
 
   </body>
+
 </html>
 
 

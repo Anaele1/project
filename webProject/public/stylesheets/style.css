@@ -20,6 +20,14 @@ p {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+li{
+  list-style: none;
+}
+
+button {
+  border: none;
+}
+
 
 /* Hide by default */
 .section, #viewAppointments, #povidersList{
@@ -447,7 +455,7 @@ p {
   }
 
   /* Hide by default */
-  .section, #viewAppointments, #povidersList{
+  .section, #viewAppointments, #povidersList, .profileEdit{
   display: none;
   }
 
@@ -467,7 +475,7 @@ p {
   height: 100%;
   gap: 8px;
   grid-template-columns: 240px 1100px;
-  grid-template-rows: 80px 100% 200px;
+  grid-template-rows: 150px 100% 200px;
   grid-template-areas: 'users_top users_top' 'users_left users_container' 'users_footer users_footer';
   }
 

@@ -21,6 +21,28 @@
 <!-- Real-time date and time display -->
 <div id="datetime" style="background-color: darkmagenta; color: beige; text-align: center; margin: 0 auto; width: 30%; padding: 5px; border-radius: 2rem;"></div>
 
+
+<!-- <label for="bg"><strong>Background</strong></label>
+<input type="radio" name="bg" id="defaultBg"><span>Default</span>
+<input type="radio" name="bg" id="blackBg"><span>Black</span>
+<input type="radio" name="bg" id="whiteBg"><span>White</span> -->
+
+<script>
+document.getElementById("blackBg").addEventListener("click", function() {
+  document.querySelector("body").style.background = "black";
+  document.querySelector("body").style.color = "white";
+});
+
+document.getElementById("whiteBg").addEventListener("click", function() {
+  document.querySelector("body").style.background = "white";
+  document.querySelector("body").style.color = "black";
+});
+
+document.getElementById("defaultBg").addEventListener("click", function() {
+  document.querySelector("body").style.background = "aquamarine";
+});
+</script>
+
 <!--success and error message script -->
 <script>
   document.getElementById('sms').style.display = 'block';
@@ -64,3 +86,5 @@
         alert(`Your appointment with ${data.providerName} has been ${data.status}`);
     });
 </script>
+
+<script src="/javascripts/main.js"></script>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet', href=''>
+    <title>Live Chat</title>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <%- include ('partials/header.ejs') %>
+    </header>
+
+   <div style="display: flex; gap: 2rem; margin-top: 1rem;">
+     <!-- Nav Section -->
+        <nav style="background-color: blueviolet; width: 30%;">
+            <ul>
+                <li>Case</li>
+                <li>P&R</li>
+                <li>Health Condition</li>
+                <li>Aidoc Test</li>
+            </ul>
+        </nav>
+
+        <!-- Main Section -->
+        <main style="background-color: gray; width: 70%;">
+            <!-- Live Chat Section -->
+            <div style="display: block;">
+                <h2>Live Chat with Providers</h2>
+                <div id="chat-container">
+                    <div id="chat-messages" style="height: 300px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;"></div>
+                    <form action="">
+                        <input type="text" id="chat-input" placeholder="Type your message..." style="width: 80%; padding: 8px; margin-right: 10px;">
+                        <button id="chat-send" style="padding: 8px 15px;">Send</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+
+    <!-- Footer Section -->
+    <footer>
+        <%- include ('partials/footer.ejs') %>
+    </footer>
+   
+</body>
+</html>

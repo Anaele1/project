@@ -1,84 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet', href='/stylesheets/style.css'>
-    <title>providers Appointments Management</title>
-</head>
-<body>
-    <main>
-        <a href="/providers/provider_dashboard">Dashboard</a><br><br>
-         <!-- Usera container header -->
-         <div class="cHeader">
-            <a href="/providers/myPatients">Appointment History</a>
-            <a href="/providers/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Pending Appointments</a>
-            <a href="/providers/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">Accepted Appointments</a>
-            <a href="/providers/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a>
-          </div>
 
-         
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel='stylesheet', href='/stylesheets/style.css'>
+        <title>providers Appointments Management</title>
+        <style>
+            #listing{
+                display: grid;
+                grid-template-columns: 2fr 2fr 2fr;
+                gap: 1rem;
+            }
+        </style>
+    </head>
 
-          <!-- Appointment status filter -->
-          <div id="appointmentStatus">
-            <h2><%= status.charAt(0).toUpperCase() + status.slice(1) %> Appointments</h2>
-            <% if (appointments.length > 0) { %>
+    <body>
+        <div class="users_wrapper">
+            <!-- Header Section -->
+            <header id="users_top">
+                <%- include ('partials/header.ejs') %>
+            </header>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Availability</th>
-                            <th>Patient Name</th>
-                            <th>Appointment Date</th>
-                            <th>Appointment Time</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% appointments.forEach(appointment => { %>
-                           
-                            <tr>
-                                <td><% if (appointment.patient_availability === 'online') { %>
-                                    <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
-                                    <% } else { %>
-                                    <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
-                                    <% } %>
-                                  </td>
-                                <!-- <td><%= appointment.patient_availability %></td> -->
-                                <td><%= appointment.patient_first_name %> <%= appointment.patient_last_name %></td>
-                                <td><%= appointment.appointment_date %></td>
-                                <td><%= appointment.appointment_time %></td>
-                                <td><%= appointment.status %></td>
-                                <td class="action-links">
-                                    <% if (appointment.status === 'pending') { %>
-                                        <form action="/providers/respond" method="POST">
-                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                          <button type="submit" name="action" value="accept">Accept</button>
-                                          <button type="submit" name="action" value="cancel">Cancel</button>
-                                        </form>
-                                    <% } else if (appointment.status === 'accepted') { %>
-                                        <form action="/providers/respond" method="POST">
-                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                          <button><a href="/chat/<%= appointment.appointment_id %>">Chat</a></button>
-                                          <button type="submit" name="action" value="cancel">Cancel</button>
-                                        </form>
-                                    <% } else if (appointment.status === 'cancelled') { %>
-                                        <form action="/providers/respond" method="POST">
-                                          <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
-                                          <button type="submit" name="action" value="accept">Re-Accept</button>
-                                        </form>
-                                    <% } %>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            <% } else { %>
-                <p>No <%= status %> appointments found.</p>
-            <% } %>
+            <!-- Navigation Section -->
+            <nav id="users_left">
+                <ul style="line-height: 1.3rem;">
+                    <li><a href="/providers/provider_dashboard">Dashboard</a></li>
+                    <li><a href="/providers/myPatients">Appointment History</a></li>
+                    <li><a href="/providers/appointments?status=pending" class="<%= status === 'pending' ? 'active' : '' %>">Pending Appointments</a></li>
+                    <li><a href="/providers/appointments?status=accepted" class="<%= status === 'accepted' ? 'active' : '' %>">Accepted Appointments</a></li>
+                    <li><a href="/providers/appointments?status=cancelled" class="<%= status === 'cancelled' ? 'active' : '' %>">Cancelled Appointments</a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Section -->
+            <main id="users_container">
+
+                <section >
+                    <!-- Appointment status filter -->
+                    <div id="appointmentStatus">
+                        <h2><%= status.charAt(0).toUpperCase() + status.slice(1) %> Appointments</h2>
+                        <% if (appointments.length > 0) { %>
+                            <div id="listing">
+                                <% appointments.forEach(appointment => { %>    
+                                    
+                                        <ul id="" style="background-color: #e8f4f8">
+                                            <img src="" alt="User image">
+                                            <!-- <li><%= appointment.patient_availability %></li> -->
+                                            <li><%= appointment.patient_first_name %> <%= appointment.patient_last_name %></li>
+                                            <li><%= appointment.appointment_date %> <%= appointment.appointment_time %></li>
+                                            <li><%= appointment.status %></li>
+                                            <li class="action-links">
+                                                <% if (appointment.status === 'pending') { %>
+                                                    <form action="/providers/respond" method="POST">
+                                                        <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                                                        <button type="submit" name="action" value="accept">Accept</button>
+                                                        <button style="color: red;" type="submit" name="action" value="cancel">Cancel</button>
+                                                    </form>
+                                                <% } else if (appointment.status === 'accepted') { %>
+                                                    <form action="/providers/respond" method="POST">
+                                                        <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                                                        <button style="color: red;" type="submit" name="action" value="cancel">Cancel</button>
+                                                        <span><a href="/providers/chat">Chat</a></span>
+                                                    </form>
+                                                <% } else if (appointment.status === 'cancelled') { %>
+                                                    <form action="/providers/respond" method="POST">
+                                                        <input type="hidden" name="appointmentId" value="<%= appointment.appointment_id %>">
+                                                        <button type="submit" name="action" value="accept">Re-Accept</button>
+                                                    </form>
+                                                <% } %>
+                                                </li>
+                                                <li><% if (appointment.patient_availability === 'online') { %>
+                                                    <span class="online-label" style="background-color: green; color: white; border-radius: 3rem;">Online</span>
+                                                    <% } else { %>
+                                                    <span class="offline-label" style="background-color: grey; color: white; border-radius: 3rem;">Offline</span>
+                                                    <% } %>
+                                                </li>
+                                        </ul>
+                                    <% }); 
+                                %>
+                            </div>
+
+                        <% } else { %>
+                            <p>No <%= status %> appointments found.</p>
+                        <% } %>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- Footer Section -->
+            <footer id="users_footer">
+                <%- include ('partials/footer.ejs') %>
+            </footer>
+
         </div>
-
-    </main>
-</body>
+    </body>
+    
 </html>

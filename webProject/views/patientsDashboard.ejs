@@ -13,8 +13,10 @@
 
         <!--users top section -->
         <div id="users_top" class="top">
-          
-          <header><%- include ('partials/header.ejs') %></header>
+          <header>
+            <%- include ('partials/header.ejs') %>
+            <%- include ('partials/gen.ejs') %>
+          </header>
           <b>PATIENT DASHBOARD</b>
         </div>
         
@@ -43,10 +45,10 @@
           </div>
           
           <!-- Google Map Section -->
-          <div id="mapContainer">
+          <!-- <div id="mapContainer">
               <input id="pac-input" type="text" placeholder="Search for health centers...">
               <div id="map"></div>
-          </div>
+          </div> -->
 
           <!-- Users header -->
           <div class="cHeader">
@@ -80,15 +82,6 @@
               
           </div>
 
-          <!-- Live Chat Section -->
-          <div style="display: none;">
-            <h2>Live Chat with Providers</h2>
-            <div id="chat-container">
-              <div id="chat-messages" style="height: 200px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px;"></div>
-              <input type="text" id="chat-input" placeholder="Type your message..." style="width: 80%; padding: 8px; margin-right: 10px;">
-              <button id="chat-send" style="padding: 8px 15px;">Send</button>
-            </div>
-          </div>
 
         </div><br><br>
         <!-- logout desktop view -->
@@ -98,6 +91,7 @@
         <div id="users_footer"><%- include ('partials/footer.ejs') %></div>
 
       </div>
+      
     </main>
 
     <!-- Location map toggle -->
